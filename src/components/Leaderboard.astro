@@ -1,0 +1,155 @@
+---
+import eventsBackground from '../assets/events_background.jpeg';
+---
+
+<section id="leaderboard" class="relative min-h-screen py-24 md:py-32 bg-[#000000] font-sans">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+    <div class="sticky top-0 w-full h-screen">
+      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50 z-0 mix-blend-luminosity" style="background-image:url({eventsBackground.src})"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-[#10152B]/90 via-[#7e22ce]/20 to-[#000000] z-0"></div>
+      <div class="absolute top-0 left-0 w-full h-64 md:h-96 bg-gradient-to-b from-black via-black/60 to-transparent z-[2]"></div>
+      <div class="absolute inset-0 z-[1] opacity-20 mix-blend-overlay bg-[radial-gradient(#ffffff_1px,transparent_1px)] bg-[size:4px_4px]"></div>
+
+      <div class="absolute top-[30%] -left-[20%] w-[140%] z-[5] opacity-25 rotate-[15deg] overflow-hidden whitespace-nowrap pointer-events-none">
+        <div class="inline-flex gap-8 banner-scroll">
+          {Array.from({ length: 10 }, (_, i) => (
+            <span key={i} class="text-8xl md:text-[12rem] font-black uppercase text-[#7e22ce] [-webkit-text-stroke:2px_#7e22ce] text-transparent tracking-tighter font-display shrink-0">DOMINATE</span>
+          ))}
+        </div>
+      </div>
+      <div class="absolute top-[50%] -left-[20%] w-[140%] z-[5] opacity-15 -rotate-[15deg] overflow-hidden whitespace-nowrap pointer-events-none">
+        <div class="inline-flex gap-8 banner-scroll-reverse">
+          {Array.from({ length: 10 }, (_, i) => (
+            <span key={i} class="text-8xl md:text-[12rem] font-black uppercase text-[#DE005F] [-webkit-text-stroke:2px_#DE005F] text-transparent tracking-tighter font-display shrink-0">CONQUER</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative z-10 max-w-4xl mx-auto px-6 flex flex-col items-center">
+    <div class="relative mb-16 md:mb-24 w-fit mx-auto text-center flex flex-col items-center justify-center">
+      <h1 class="relative z-10 text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-widest text-white drop-shadow-2xl font-display leader-heading">LEADER</h1>
+      <h1 class="absolute z-20 drop-shadow-black top-12 md:top-22 text-6xl md:text-8xl lg:text-[10rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] text-[#7e22ce] [text-shadow:0_0_10px_rgba(126,34,206,0.8),0_0_20px_rgba(126,34,206,0.6),0_0_40px_rgba(126,34,206,0.4),0_0_80px_rgba(126,34,206,0.2)] leader-heading">BOARD</h1>
+    </div>
+
+    <div id="leaderboard-table" class="w-full flex flex-col mt-10 relative z-20 overflow-hidden border border-white/10 bg-[#1a1525]/60 shadow-[0_0_50px_rgba(126,34,206,0.15)] rounded-xl">
+      <div class="flex items-center justify-between px-6 py-4 md:px-8 md:py-6 bg-[#7e22ce]/90">
+        <h3 class="text-sm md:text-xl font-black uppercase tracking-[0.2em] text-white font-display">Standings</h3>
+        <h3 class="text-sm md:text-xl font-black uppercase tracking-[0.2em] text-white font-display">Score</h3>
+      </div>
+      <div id="leaderboard-rows" class="flex flex-col">
+        <div class="flex items-center justify-center px-6 py-8 text-white/40 text-sm font-display">Loading...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes bannerScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes bannerScrollReverse {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+  .banner-scroll {
+    animation: bannerScroll 30s linear infinite;
+  }
+  .banner-scroll-reverse {
+    animation: bannerScrollReverse 40s linear infinite;
+  }
+  .leader-row {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .leader-row.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
+
+<script>
+  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+  const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  async function loadLeaderboard() {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/leaderboard?select=*&order=point.desc`, {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+        },
+      });
+      const data = await res.json();
+      const container = document.getElementById('leaderboard-rows');
+
+      if (!data || data.length === 0) {
+        container.innerHTML = '<div class="flex items-center justify-center px-6 py-8 text-white/40 text-sm font-display">No data available</div>';
+        return;
+      }
+
+      container.innerHTML = data
+        .map(
+          (row, i) => `
+        <div class="leader-row group relative flex items-center justify-between px-6 py-4 md:px-8 md:py-5 border-b border-white/5 last:border-b-0 transition-colors duration-200 hover:bg-[#7e22ce]/20 ${i % 2 === 0 ? 'bg-transparent' : 'bg-black/20'}">
+          <div class="flex items-center gap-4 md:gap-6">
+            <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 border border-white/5 flex items-center justify-center font-black text-lg md:text-xl shadow-inner font-display ${i === 0 ? 'text-[#DE005F]' : i === 1 ? 'text-[#b829ea]' : i === 2 ? 'text-[#7e22ce]' : 'text-white/40'}">${i + 1}</div>
+            <p class="text-sm md:text-lg font-bold uppercase tracking-widest text-white/90 truncate max-w-[180px] md:max-w-md font-display">${row.department}</p>
+          </div>
+          <div class="flex items-baseline gap-1 md:gap-2">
+            <span class="text-xl md:text-3xl font-black tabular-nums text-[#b829ea] font-display">${row.point?.toLocaleString()}</span>
+          </div>
+        </div>`
+        )
+        .join('');
+
+      // Stagger reveal with intersection observer
+      const rows = container.querySelectorAll('.leader-row');
+      const rowObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              rows.forEach((row, i) => {
+                setTimeout(() => row.classList.add('visible'), i * 100);
+              });
+              rowObserver.disconnect();
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      if (rows.length > 0) rowObserver.observe(rows[0]);
+    } catch (err) {
+      document.getElementById('leaderboard-rows').innerHTML =
+        '<div class="flex items-center justify-center px-6 py-8 text-red-400/60 text-sm font-display">Failed to load leaderboard</div>';
+    }
+  }
+
+  loadLeaderboard();
+
+  // Scroll-triggered heading reveal
+  const headings = document.querySelectorAll('.leader-heading');
+  const headingObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'scale(1) translateY(0)';
+        } else {
+          entry.target.style.opacity = '0';
+          entry.target.style.transform = 'scale(0.8) translateY(30px)';
+        }
+      });
+    },
+    { threshold: 0.3 }
+  );
+  headings.forEach((h) => {
+    h.style.opacity = '0';
+    h.style.transform = 'scale(0.8) translateY(30px)';
+    h.style.transition = 'opacity 0.8s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    headingObserver.observe(h);
+  });
+</script>

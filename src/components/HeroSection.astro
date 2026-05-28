@@ -1,0 +1,259 @@
+---
+import heroBg from '../assets/kalyani_background_2.webp';
+import dishaLogo from '../assets/disha_logo.webp';
+---
+
+<div id="home" class="relative h-[85svh] md:h-screen w-full bg-[#10152B] text-white flex flex-col font-sans overflow-hidden">
+  <img
+    src={heroBg.src}
+    alt=""
+    class="absolute inset-0 w-full h-full object-cover z-0 opacity-40 pointer-events-none floating-bg"
+    aria-hidden="true"
+  />
+
+  <div class="absolute -inset-[10px] z-5 opacity-25 mix-blend-overlay pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] bg-[size:6px_6px] scanline-move"></div>
+
+  <div class="hidden md:block absolute inset-0 z-6 opacity-10 mix-blend-overlay pointer-events-none" style="background-image: url(&quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMDAlJyBoZWlnaHQ9JzEwMCUnPjxmaWx0ZXIgaWQ9J24nPjxmZVR1cmJ1bGVuY2UgdHlwZT0nZnJhY3RhbE5vaXNlJyBiYXNlRnJlcXVlbmN5PScwLjc1JyBudW1PY3RhdmVzPSczJyBzdGl0Y2hUaWxlcz0nc3RpdGNoJy8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9JzEwMCUnIGhlaWdodD0nMTAwJScgZmlsdGVyPSd1cmwoI24pJy8+PC9zdmc+&quot;);"></div>
+
+  <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent z-10 pointer-events-none"></div>
+
+  <header id="main-header" class="fixed z-[60] flex items-center justify-between bg-[#0f0f0f]/60 backdrop-blur-2xl border-b border-white/[0.07] shadow-[0_4px_30px_rgba(0,0,0,0.7)]" style="left:0;right:0;margin:0 auto;width:100%;padding:clamp(10px,1.5vh,16px) clamp(14px,2.5vw,48px)">
+    <div class="flex items-center shrink-0">
+      <a href="#home">
+        <img src={dishaLogo.src} alt="DISHA 26" style="height:clamp(22px,3.4vh,34px)" class="w-auto object-contain" />
+      </a>
+    </div>
+    <nav class="hidden lg:flex items-center" style="gap:clamp(20px,2.8vw,52px)">
+      <a href="#about" class="nav-link font-bold text-white/50 hover:text-white transition-colors duration-200 whitespace-nowrap font-display" style="font-size:clamp(11px,0.9vw,15px);letter-spacing:0.13em">ABOUT</a>
+      <a href="#events" class="nav-link font-bold text-white/50 hover:text-white transition-colors duration-200 whitespace-nowrap font-display" style="font-size:clamp(11px,0.9vw,15px);letter-spacing:0.13em">EVENTS</a>
+      <a href="#schedule" class="nav-link font-bold text-white/50 hover:text-white transition-colors duration-200 whitespace-nowrap font-display" style="font-size:clamp(11px,0.9vw,15px);letter-spacing:0.13em">SCHEDULE</a>
+      <a href="#gallery" class="nav-link font-bold text-white/50 hover:text-white transition-colors duration-200 whitespace-nowrap font-display" style="font-size:clamp(11px,0.9vw,15px);letter-spacing:0.13em">GALLERY</a>
+      <a href="#contact" class="nav-link font-bold text-white/50 hover:text-white transition-colors duration-200 whitespace-nowrap font-display" style="font-size:clamp(11px,0.9vw,15px);letter-spacing:0.13em">CONTACT</a>
+    </nav>
+    <div class="hidden lg:flex items-center shrink-0">
+      <button id="header-register" class="flex items-center gap-1.5 font-bold text-white/70 hover:text-white transition-colors whitespace-nowrap font-display" style="font-size:clamp(11px,0.9vw,15px);letter-spacing:0.13em">
+        REGISTER
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
+    </div>
+    <div class="flex lg:hidden items-center shrink-0">
+      <span id="header-title" class="font-black text-white/80 whitespace-nowrap uppercase transition-all duration-300 font-display" style="font-size:clamp(11px,3.2vw,13px);letter-spacing:0.1em">CET College Union 25-26</span>
+    </div>
+    <div class="flex lg:hidden items-center shrink-0">
+      <button id="menu-toggle" class="flex items-center justify-center text-white/60 hover:text-white transition-colors rounded-full" style="padding:6px" aria-label="Toggle menu">
+        <svg id="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
+        <svg id="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="hidden"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="mobile-overlay" class="fixed inset-0 z-[55] flex-col hidden" style="background:rgba(0,0,0,0.85);backdrop-filter:blur(12px)">
+    <div id="menu-card" class="absolute bg-[#111111] border border-white/[0.07] rounded-2xl overflow-hidden" style="top:calc(2vh + clamp(48px,7vh,70px) + 12px);left:0;right:0;margin:0 auto;width:min(92vw,440px);box-shadow:0 20px 80px rgba(0,0,0,0.9)">
+      <nav class="flex flex-col">
+        <a href="#about" class="mobile-nav-link flex items-center justify-between px-6 py-[18px] font-semibold text-white/75 hover:text-white hover:bg-white/[0.05] border-b border-white/[0.05] transition-colors duration-150 font-display" style="font-size:clamp(14px,4vw,17px);letter-spacing:0.1em">
+          ABOUT
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="opacity-25 shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <a href="#events" class="mobile-nav-link flex items-center justify-between px-6 py-[18px] font-semibold text-white/75 hover:text-white hover:bg-white/[0.05] border-b border-white/[0.05] transition-colors duration-150 font-display" style="font-size:clamp(14px,4vw,17px);letter-spacing:0.1em">
+          EVENTS
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="opacity-25 shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <a href="#schedule" class="mobile-nav-link flex items-center justify-between px-6 py-[18px] font-semibold text-white/75 hover:text-white hover:bg-white/[0.05] border-b border-white/[0.05] transition-colors duration-150 font-display" style="font-size:clamp(14px,4vw,17px);letter-spacing:0.1em">
+          SCHEDULE
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="opacity-25 shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <a href="#gallery" class="mobile-nav-link flex items-center justify-between px-6 py-[18px] font-semibold text-white/75 hover:text-white hover:bg-white/[0.05] border-b border-white/[0.05] transition-colors duration-150 font-display" style="font-size:clamp(14px,4vw,17px);letter-spacing:0.1em">
+          GALLERY
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="opacity-25 shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <a href="#contact" class="mobile-nav-link flex items-center justify-between px-6 py-[18px] font-semibold text-white/75 hover:text-white hover:bg-white/[0.05] border-b border-white/[0.05] transition-colors duration-150 !border-b-0 font-display" style="font-size:clamp(14px,4vw,17px);letter-spacing:0.1em">
+          CONTACT
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="opacity-25 shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </nav>
+      <div class="p-4 pt-3">
+        <button class="w-full py-4 rounded-xl bg-gradient-to-r from-[#b530ff] to-[#ff2b93] text-white font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-[0_4px_28px_rgba(181,48,255,0.4)] font-display" style="font-size:clamp(13px,3.5vw,15px);letter-spacing:0.13em">
+          REGISTER NOW
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <main class="relative z-20 flex flex-col items-center justify-center grow px-4 text-center -mt-16 md:-mt-16 lg:-mt-24">
+    <div class="relative mb-6 md:mb-10 w-fit mx-auto whitespace-nowrap z-0 flex items-center justify-center">
+      <h1 class="absolute z-0 text-8xl md:text-[10rem] lg:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] text-[#DE005F] [-webkit-text-stroke:10px_#DE005F] md:[-webkit-text-stroke:18px_#DE005F] drop-shadow-[0_0_15px_rgba(222,0,95,0.8)]">
+        Disha '26
+      </h1>
+      <h1 class="relative z-20 text-8xl md:text-[10rem] lg:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] text-white">
+        Disha '26
+      </h1>
+    </div>
+    <div class="text-lg md:text-2xl lg:text-3xl font-black uppercase tracking-widest flex items-center gap-2 md:gap-4 bg-[#1a1525]/90 px-6 py-3 md:px-8 md:py-4 rounded-full border border-white/5 relative z-10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+      <span class="timer-unit" data-unit="D">
+        <span class="timer-value">00</span>
+        <span class="text-[#B829EA] font-black text-[10px] md:text-xs tracking-tighter">D</span>
+      </span>
+      <span class="text-white opacity-40 timer-colon">:</span>
+      <span class="timer-unit" data-unit="H">
+        <span class="timer-value">00</span>
+        <span class="text-[#B829EA] font-black text-[10px] md:text-xs tracking-tighter">H</span>
+      </span>
+      <span class="text-white opacity-40 timer-colon">:</span>
+      <span class="timer-unit" data-unit="M">
+        <span class="timer-value">00</span>
+        <span class="text-[#B829EA] font-black text-[10px] md:text-xs tracking-tighter">M</span>
+      </span>
+      <span class="text-white opacity-40 timer-colon">:</span>
+      <span class="timer-unit" data-unit="S">
+        <span class="timer-value">00</span>
+        <span class="text-[#B829EA] font-black text-[10px] md:text-xs tracking-tighter">S</span>
+      </span>
+    </div>
+    <button class="mt-8 px-12 py-3.5 bg-[#DE005F] text-white text-sm font-bold uppercase tracking-[0.2em] hover:bg-[#b8004e] active:scale-95 transition-all duration-200 select-none whitespace-nowrap relative z-10 shadow-xl font-display">
+      Register
+    </button>
+  </main>
+
+  <div class="absolute bottom-[16%] md:bottom-[10%] lg:bottom-[8%] z-20 w-[120%] -ml-[10%] overflow-hidden whitespace-nowrap py-4 md:py-6 bg-black/80 border-y-[3px] -rotate-2 shadow-2xl pointer-events-none">
+    <div class="inline-flex gap-12 md:gap-24 pr-12 md:pr-24 ticker-track">
+      {Array.from({ length: 12 }, (_, i) => (
+        <span key={i} class="text-xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider font-display shrink-0">
+          THE BIGGEST FRESHERS FEST <span class="text-[#DE005F]">COMING SOON!</span>
+        </span>
+      ))}
+    </div>
+  </div>
+
+  <div class="absolute bottom-12 md:bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-30 opacity-70 hover:opacity-100 transition-opacity cursor-pointer text-white md:hidden">
+    <span class="text-sm font-normal">Scroll Down</span>
+    <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="3" d="M19 9l-7 7-7-7" />
+    </svg>
+  </div>
+</div>
+
+<style>
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(7px, -7px) rotate(0.2deg); }
+    50% { transform: translate(10px, 0) rotate(0.4deg); }
+    75% { transform: translate(7px, 7px) rotate(0.2deg); }
+  }
+  .floating-bg {
+    animation: float 12s linear infinite;
+  }
+  @keyframes scanline {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(2px, 2px); }
+  }
+  .scanline-move {
+    animation: scanline 0.2s linear infinite;
+  }
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .ticker-track {
+    animation: ticker 20s linear infinite;
+  }
+</style>
+
+<script>
+  // --- Countdown Timer ---
+  const TARGET = new Date('2026-03-27T00:00:00').getTime();
+
+  function updateTimer() {
+    const now = Date.now();
+    const diff = Math.max(0, TARGET - now);
+    const units = {
+      D: Math.floor(diff / (1000 * 60 * 60 * 24)),
+      H: Math.floor((diff / (1000 * 60 * 60)) % 24),
+      M: Math.floor((diff / 1000 / 60) % 60),
+      S: Math.floor((diff / 1000) % 60),
+    };
+
+    document.querySelectorAll('.timer-unit').forEach((el) => {
+      const unit = el.dataset.unit;
+      const val = units[unit].toString().padStart(2, '0');
+      el.querySelector('.timer-value').textContent = val;
+    });
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+
+  // --- Mobile Menu ---
+  const menuToggle = document.getElementById('menu-toggle');
+  const overlay = document.getElementById('mobile-overlay');
+  const menuCard = document.getElementById('menu-card');
+  const iconOpen = document.getElementById('menu-icon-open');
+  const iconClose = document.getElementById('menu-icon-close');
+  let menuOpen = false;
+
+  function openMenu() {
+    menuOpen = true;
+    overlay.classList.remove('hidden');
+    overlay.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    iconOpen.classList.add('hidden');
+    iconClose.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      overlay.style.opacity = '0';
+      menuCard.style.opacity = '0';
+      menuCard.style.transform = 'scale(0.94) translateY(-20px)';
+      requestAnimationFrame(() => {
+        overlay.style.transition = 'opacity 0.25s ease';
+        overlay.style.opacity = '1';
+        menuCard.style.transition = 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        menuCard.style.opacity = '1';
+        menuCard.style.transform = 'scale(1) translateY(0)';
+        document.querySelectorAll('.mobile-nav-link').forEach((el, i) => {
+          el.style.transition = `opacity 0.3s ease, transform 0.3s ease`;
+          el.style.transitionDelay = `${0.2 + i * 0.055}s`;
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        });
+      });
+    });
+  }
+
+  function closeMenu() {
+    menuOpen = false;
+    document.body.style.overflow = '';
+    menuCard.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+    menuCard.style.opacity = '0';
+    menuCard.style.transform = 'scale(0.95) translateY(-10px)';
+    overlay.style.transition = 'opacity 0.25s ease';
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.classList.add('hidden');
+      overlay.classList.remove('flex');
+      iconOpen.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+    }, 250);
+  }
+
+  menuToggle.addEventListener('click', () => (menuOpen ? closeMenu() : openMenu()));
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeMenu();
+  });
+  document.querySelectorAll('.mobile-nav-link').forEach((a) => {
+    a.addEventListener('click', closeMenu);
+    a.style.opacity = '0';
+    a.style.transform = 'translateY(12px)';
+  });
+
+  // --- Scroll-Aware Header Title ---
+  const heroEl = document.getElementById('home');
+  const headerTitle = document.getElementById('header-title');
+  if (heroEl && headerTitle) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        headerTitle.textContent = entry.isIntersecting ? 'CET College Union 25-26' : 'Disha 2026';
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(heroEl);
+  }
+</script>

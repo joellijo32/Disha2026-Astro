@@ -1,0 +1,57 @@
+---
+const textContent = "DISHA '26";
+---
+
+<footer class="w-full bg-black pt-12 pb-6 flex flex-col items-center justify-center overflow-hidden">
+  <div class="w-full max-w-5xl px-4">
+    <a href="https://www.instagram.com/dishacet" target="_blank" rel="noopener noreferrer" class="block w-full">
+      <svg viewBox="0 0 800 180" class="w-full h-auto overflow-visible cursor-pointer">
+        <defs>
+          <mask id="textMask">
+            <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" class="font-black uppercase tracking-tighter md:tracking-normal font-display" fill="white" style="font-size:120px">
+              {textContent}
+            </text>
+          </mask>
+        </defs>
+
+        <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" class="font-black uppercase tracking-tighter md:tracking-normal font-display" fill="#1a102e" style="font-size:120px">
+          {textContent}
+        </text>
+
+        <g mask="url(#textMask)">
+          <g class="wave-group">
+            <path class="wave-path-1" fill="#a855f7" opacity="0.4" d="M0,20 Q100,0 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20 T1400,20 T1600,20 V200 H0 Z" />
+            <path class="wave-path-2" fill="#9333ea" d="M0,20 Q50,5 100,20 T200,20 T300,20 T400,20 T500,20 T600,20 T700,20 T800,20 T900,20 T1000,20 T1100,20 T1200,20 T1300,20 T1400,20 T1500,20 T1600,20 V200 H0 Z" />
+          </g>
+        </g>
+      </svg>
+    </a>
+  </div>
+
+  <div class="mt-8 flex flex-col items-center gap-4">
+    <div class="h-px w-24 bg-gradient-to-r from-transparent via-purple-900/50 to-transparent" />
+    <div class="flex items-center gap-6">
+      <a href="https://www.instagram.com/cet.college.union" target="_blank" rel="noopener noreferrer" class="text-zinc-800 hover:text-purple-500 transition-colors text-[10px] tracking-[0.3em] font-bold uppercase">
+        © 2026 CET College Union
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  @keyframes waveSlide1 {
+    0% { transform: translateX(-800px); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes waveSlide2 {
+    0% { transform: translateX(-800px); }
+    100% { transform: translateX(0); }
+  }
+  .wave-path-1 {
+    animation: waveSlide1 8s linear infinite;
+  }
+  .wave-path-2 {
+    animation: waveSlide2 5s linear infinite;
+    transform: translateY(35px);
+  }
+</style>

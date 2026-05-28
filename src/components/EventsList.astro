@@ -1,0 +1,170 @@
+---
+import DitherCanvas from './ThreeCanvas.jsx';
+
+const REAL_EVENTS_DATA = [
+  { id: 1, title: 'MAIN EVENTS', eventsList: ['Face of Disha', 'MX-Techie', 'MX-Disha', 'Fashion Show', 'Street Play', 'Disha Idol', 'Just Dance', 'Wall Painting'] },
+  { id: 2, title: 'TECHNICAL', eventsList: ['Ideathon', 'Quiz', 'Technical Essay', 'Prompt Writing', 'Speed Typing'] },
+  { id: 3, title: 'E-GAMES', eventsList: ['E-Football', 'BGMI', 'Valorant', 'Mini Militia', 'Free Fire', 'FIFA', 'COD'] },
+  { id: 4, title: 'SPORTS', eventsList: ['Football', 'Cricket', 'Volleyball', 'Tug of War', 'Badminton', 'Table Tennis', 'Chess', 'Carroms', 'Cycle Slow Race', 'Basketball', 'Arm Wrestling', 'Super Over (W)', 'Penalty Shoot (W)', 'Mr. Ponjikkara'] },
+  { id: 5, title: 'ATHLETICS', eventsList: ['100M Race (M/W)', 'Shot Put (M/W)', 'High Jump', 'Long Jump', '400 M Relay (M/W)', 'Brisk Walk 800M (M/W)', '200M Race (M/W)', 'Biathlon'] },
+  { id: 6, title: 'LITERARY', eventsList: ['Story Writing (Eng)', 'Story Writing (Mal)', 'Story Writing (Hin)', 'Versification (Eng)', 'Versification (Mal)', 'Versification (Hin)', 'Jingle Writing (Eng)', 'Jingle Writing (Mal)', 'Book Review', 'Film Review', 'Recitation (Eng)', 'Recitation (Mal)', 'Recitation (Hin)', 'Short Story (Eng)', 'Short Story (Mal)', 'Caption Writing (Eng)', 'Caption Writing (Mal)', 'Extempore (Eng)', 'Extempore (Mal)', 'Extempore (Hin)'] },
+  { id: 7, title: 'MUSICAL', eventsList: ['Classical Music', 'Light Music', 'Western (Duet)', 'Bands Battle', 'Nadanpattu', 'Unplugged', 'Mappilappattu'] },
+  { id: 8, title: 'DANCE', eventsList: ['Adapt Tunes', 'Prepared Duo', 'Prepared Solo'] },
+  { id: 9, title: 'THEATRICAL', eventsList: ['Street Play', 'Mono Act', 'Mimicry', 'Stand-up Comedy', 'Skit'] },
+  { id: 10, title: 'ART', eventsList: ['Pencil Drawing', 'Water Colouring', 'Cartoon', 'Digital Painting', 'Face Painting', 'Doodle Art', 'Minimal Poster', 'Oil Painting', 'Clay Modelling', 'Origami', 'Bottle Art', 'Calligraphy'] },
+  { id: 11, title: 'MISCELLANEOUS', eventsList: ['Troll Making', 'Rubix Cube', 'Short Film', 'Department Magazine', 'Mannequin', 'Trailer Making', 'Reel Making', 'Business (Naptol)', 'Channel Surfing', 'Guess Who?', 'Treasure Hunt', 'Open Debate', 'Jam', 'Integration Bee', 'Spot Commentary', 'Shot Story', 'Picture Perception', 'Theme-Based Photography', 'Movie Recreation'] },
+];
+---
+
+<section id="events" class="relative w-full bg-black z-20">
+  <div class="absolute inset-0 z-0 h-full w-full pointer-events-auto">
+    <div class="sticky top-0 w-full h-[100dvh] overflow-hidden bg-black">
+      <div class="absolute inset-0 w-full h-full">
+        <DitherCanvas
+          client:only="react"
+          waveColor={[0.45, 0.0, 0.2]}
+          disableAnimation={false}
+          enableMouseInteraction={true}
+          mouseRadius={0.6}
+          colorNum={4}
+          waveAmplitude={0.3}
+          waveFrequency={3}
+          waveSpeed={0.05}
+        />
+      </div>
+      <div class="absolute inset-0 bg-black/30 pointer-events-none"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#8A003B]/30 via-transparent to-transparent opacity-80 pointer-events-none"></div>
+      <div class="absolute top-0 left-0 w-full h-64 md:h-96 bg-gradient-to-b from-black via-black/60 to-transparent z-10 pointer-events-none"></div>
+    </div>
+  </div>
+
+  <div id="events-scroll-section" class="sticky top-0 z-10 w-full h-[100dvh] flex items-center overflow-hidden pointer-events-none">
+    <div class="absolute top-10 md:top-14 left-0 z-50 w-full flex justify-center pointer-events-none px-4">
+      <h2 class="flex flex-col md:flex-row items-center md:items-baseline gap-1 md:gap-5 drop-shadow-[0_0_15px_rgba(222,0,95,0.6)]">
+        <span class="text-[#DE005F] -mt-4 font-['Sedgwick_Ave_Display',_cursive] font-extrabold tracking-[-0.05em] text-6xl md:text-9xl relative [text-shadow:0_0_10px_rgba(222,0,95,0.8),0_0_20px_rgba(222,0,95,0.6),0_0_40px_rgba(222,0,95,0.4)]">
+          EVENTS
+        </span>
+      </h2>
+    </div>
+
+    <div id="events-cards-wrapper" class="flex items-center h-full w-max px-[5vw] gap-6 md:gap-12 mt-28 md:mt-32 will-change-transform">
+      {REAL_EVENTS_DATA.map((event) => (
+        <div
+          key={event.id}
+          class="event-card pointer-events-auto w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-[32vw] h-[70vh] flex flex-col bg-black/60 border border-white/10 rounded-none p-6 md:p-10 shrink-0 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden"
+        >
+          <div class="shrink-0 mb-6 w-full flex justify-center">
+            <h3 class="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-wider text-[#DE005F] break-words text-center font-display" style="text-shadow:0 0 15px rgba(222,0,95,0.4)">
+              {event.title}
+            </h3>
+          </div>
+
+          <div class="flex-grow overflow-y-auto overflow-x-hidden custom-scrollbar pr-2 relative w-full">
+            <div class="relative flex items-center justify-center gap-3 mb-6 sticky top-0 z-20 pt-2 pb-6 -mt-2 w-full">
+              <div class="absolute inset-0 -mx-6 bg-gradient-to-b from-black/90 via-black/50 to-transparent pointer-events-none"></div>
+              <span class="relative z-10 h-px flex-grow bg-gradient-to-r from-transparent to-[#DE005F]"></span>
+              <span class="relative z-10 h-px flex-grow bg-gradient-to-l from-transparent to-[#DE005F]/50"></span>
+            </div>
+
+            <div class="flex flex-col w-full">
+              {event.eventsList.map((item, index) => (
+                <div key={index} class="group flex items-start gap-4 py-3 md:py-4 border-b border-white/10 hover:border-white/30 transition-colors w-full">
+                  <span class="text-[#DE005F] font-black text-sm md:text-base w-5 shrink-0 mt-0.5">
+                    {(index + 1).toString().padStart(2, '0')}
+                  </span>
+                  <span class="text-white/90 group-hover:text-white font-bold tracking-wide text-sm sm:text-base md:text-lg flex-1 break-words whitespace-normal leading-snug" style="text-shadow:0 2px 4px rgba(0,0,0,0.5)">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div id="events-spacer" class="w-full pointer-events-none"></div>
+</section>
+
+<script>
+  (function () {
+    var section = document.getElementById('events-scroll-section');
+    var wrapper = document.getElementById('events-cards-wrapper');
+    var spacer = document.getElementById('events-spacer');
+    if (!section || !wrapper || !spacer) return;
+
+    var maxScroll = 0;
+    var sectionTop = -1;
+    var vh = window.innerHeight;
+    var lastX = 0;
+    var isSwiping = false;
+
+    function getScrollAmount() {
+      return wrapper.scrollWidth - window.innerWidth + window.innerWidth * 0.05;
+    }
+
+    function setup() {
+      maxScroll = getScrollAmount();
+      spacer.style.height = maxScroll + 'px';
+
+      if (sectionTop === -1) {
+        var eventsSection = section.parentElement;
+        sectionTop = eventsSection.getBoundingClientRect().top + window.scrollY + section.offsetTop;
+      }
+    }
+
+    function onScroll() {
+      if (sectionTop === -1) return;
+      var scrolled = window.scrollY - sectionTop;
+      if (scrolled > 0 && scrolled < maxScroll) {
+        wrapper.style.transform = 'translateX(' + (-scrolled) + 'px)';
+      } else if (scrolled <= 0) {
+        wrapper.style.transform = 'translateX(0px)';
+      } else {
+        wrapper.style.transform = 'translateX(' + (-maxScroll) + 'px)';
+      }
+    }
+
+    new ResizeObserver(function () { setup(); onScroll(); }).observe(document.body);
+
+    setup();
+    window.addEventListener('resize', function () { vh = window.innerHeight; setup(); onScroll(); });
+    document.addEventListener('scroll', onScroll, { passive: true });
+
+    // Touch swipe hijack
+    var sx = 0;
+    var sy = 0;
+
+    section.addEventListener('touchstart', function (e) {
+      sx = e.touches[0].clientX;
+      sy = e.touches[0].clientY;
+      lastX = sx;
+      isSwiping = false;
+    }, { passive: true });
+
+    section.addEventListener('touchmove', function (e) {
+      if (sx === 0 && sy === 0) return;
+      var cx = e.touches[0].clientX;
+      var cy = e.touches[0].clientY;
+      var dx = sx - cx;
+      var dy = sy - cy;
+
+      if (!isSwiping && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) {
+        isSwiping = true;
+      }
+
+      if (isSwiping) {
+        e.preventDefault();
+        window.scrollBy({ top: (lastX - cx) * 1.5, left: 0 });
+        lastX = cx;
+      }
+    }, { passive: false });
+
+    section.addEventListener('touchend', function () {
+      sx = 0;
+      sy = 0;
+      isSwiping = false;
+    }, { passive: true });
+  })();
+</script>
