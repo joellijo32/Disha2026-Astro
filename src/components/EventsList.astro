@@ -21,7 +21,7 @@ const REAL_EVENTS_DATA = [
     <div class="sticky top-0 w-full h-[100dvh] overflow-hidden bg-black">
       <div class="absolute inset-0 w-full h-full">
         <DitherCanvas
-          client:only="react"
+          client:idle
           waveColor={[0.45, 0.0, 0.2]}
           disableAnimation={false}
           enableMouseInteraction={true}
@@ -106,7 +106,7 @@ const REAL_EVENTS_DATA = [
     function setup() {
       maxScroll = getScrollAmount();
       var startOffset = window.innerHeight * 0.5;
-      var spacerHeight = Math.max(maxScroll + startOffset - window.innerHeight, 0);
+      var spacerHeight = Math.max(maxScroll + startOffset, 0);
       spacer.style.height = spacerHeight + 'px';
 
       if (sectionTop === -1) {
@@ -116,7 +116,7 @@ const REAL_EVENTS_DATA = [
     }
 
     function getStartOffset() {
-      return window.innerHeight * 0.5;
+      return window.innerWidth < 768 ? window.innerHeight * 0.2 : window.innerHeight * 0.5;
     }
 
     function onScroll() {
