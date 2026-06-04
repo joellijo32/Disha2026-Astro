@@ -436,21 +436,33 @@
         bgAnimId = null;
       }
 
-      function isMobileDevice() {
-        return (
-          navigator.maxTouchPoints > 2 || 
-          /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase())
-        );
+      var pixelRatio = (navigator.maxTouchPoints > 2 || /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase())) ? 1.5 : 2.5;
+
+      function downloadBlob(blobData) {
+        try {
+          var url = URL.createObjectURL(blobData);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = 'Disha26VIP_Pass.png';
+          document.body.appendChild(a);
+          a.click();
+          console.log('Easter Egg downloaded successfully');
+          setTimeout(function () {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }, 5000);
+        } catch (error) {
+          console.error('Download failed:', error.message);
+        }
       }
-      var isMobile = isMobileDevice();
 
       try {
         var htmlMod = await import('html-to-image');
         var blob = await htmlMod.toBlob(ticket, {
           backgroundColor: '#050505',
-          pixelRatio: isMobile ? 1.5 : 2.5,
-          fontEmbedCSS: '', // Skip fetching external CSS fonts which avoids the CORS CSSStyleSheet error
-          skipFonts: true   // Skip font embedding completely to avoid the SecurityError on Google Fonts
+          pixelRatio: pixelRatio,
+          fontEmbedCSS: '',
+          skipFonts: true
         });
 
         if (!blob) {
@@ -461,9 +473,8 @@
         console.log('Capture successful:', blob.size, 'bytes');
 
         var file = new File([blob], 'Disha26VIP_Pass.png', { type: 'image/png' });
-        var canShare = navigator.canShare && navigator.canShare({ files: [file] });
 
-        if (isMobile && canShare) {
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
           try {
             await navigator.share({
               files: [file],
@@ -474,25 +485,24 @@
           } catch (error) {
             if (error.name !== 'AbortError') {
               console.error('Share failed:', error.message);
+              downloadBlob(blob);
+            }
+          }
+        } else if (navigator.share) {
+          try {
+            await navigator.share({
+              title: "Disha '26",
+              text: "Here's my Disha 2026 VIP Pass, where's yours?"
+            });
+            console.log('Easter Egg shared successfully (text)');
+          } catch (error) {
+            if (error.name !== 'AbortError') {
+              console.error('Share failed:', error.message);
+              downloadBlob(blob);
             }
           }
         } else {
-          try {
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = 'Disha26VIP_Pass.png';
-            document.body.appendChild(a);
-            a.click();
-            console.log('Easter Egg downloaded successfully');
-            
-            setTimeout(function () {
-              document.body.removeChild(a);
-              URL.revokeObjectURL(url);
-            }, 5000);
-          } catch (error) {
-            console.error('Download failed:', error.message);
-          }
+          downloadBlob(blob);
         }
       } catch (error) {
         console.error('Easter Egg capture failed:', error.message, error.stack);
