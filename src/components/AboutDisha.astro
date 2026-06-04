@@ -17,7 +17,6 @@ const words = ABOUT_TEXT.split(' ');
   <div class="relative z-10 max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-center lg:gap-24">
     <div class="w-full lg:w-1/2 flex items-center justify-center lg:justify-end mb-12 lg:mb-0 lg:-ml-20 lg:pb-40">
       <div class="relative inline-block">
-        <div class="absolute -inset-[10px] z-5 opacity-20 mix-blend-overlay pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] bg-[size:6px_6px] scanline-move"></div>
         <img
           src={kalyaniforwebAsset.src}
           alt="Illustrated version of the Kalyani character"
@@ -63,14 +62,6 @@ const words = ABOUT_TEXT.split(' ');
   }
   .reveal-on-scroll.visible {
     opacity: 1;
-  }
-  @keyframes scanline {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(2px, 2px); }
-  }
-  .scanline-move {
-    animation: scanline 0.5s linear infinite;
-    will-change: transform;
   }
   .kalyaniforweb-reveal {
     opacity: 0;
