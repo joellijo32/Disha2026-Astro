@@ -16,6 +16,7 @@
     "@react-three/postprocessing": "^3.0.4",
     "@tailwindcss/postcss": "^4.3.0",
     "astro": "^6.4.0",
+    "html-to-image": "^1.11.13",
     "postprocessing": "^6.38.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
