@@ -4,11 +4,11 @@ const name1 = "Sooraj";
 const ph1 = "+91 73063 94116";
 const name2 = "George";
 const ph2 = "+91 73568 78569";
-import WaveBg from './WaveBg.jsx';
+// import WaveBg from './WaveBg.jsx';
 ---
 
 <footer class="w-full bg-black flex flex-col relative overflow-hidden">
-  <WaveBg client:visible />
+  {/* <WaveBg client:visible /> */}
 
   <div class="relative z-10">
     <!-- Mobile / Tablet: stacked, centered -->
@@ -21,7 +21,7 @@ import WaveBg from './WaveBg.jsx';
         </div>
       </div>
 
-      <h2 class="font-['Sedgwick_Ave_Display',_cursive] font-extrabold tracking-tighter text-white leading-none text-center
+      <h2 class="vip-secret-trigger cursor-pointer select-none font-['Sedgwick_Ave_Display',_cursive] font-extrabold tracking-tighter text-white leading-none text-center
                  text-[clamp(3rem,15vw,6rem)]
                  [text-shadow:0_0_10px_rgba(137,17,179,0.8),0_0_20px_rgba(137,17,179,0.6),0_0_40px_rgba(137,17,179,0.4)]">
         {textContent}
@@ -58,7 +58,7 @@ import WaveBg from './WaveBg.jsx';
     <div class="hidden lg:grid lg:grid-cols-[65%_35%] w-full max-w-7xl mx-auto px-12 pt-10 pb-16">
       <!-- Left: DISHA -->
       <div class="flex flex-col justify-end">
-        <h2 class="font-['Sedgwick_Ave_Display',_cursive] font-extrabold tracking-tighter text-white leading-none
+        <h2 class="vip-secret-trigger cursor-pointer select-none font-['Sedgwick_Ave_Display',_cursive] font-extrabold tracking-tighter text-white leading-none
                    text-[clamp(2.5rem,8vw,6.5rem)]
                    [text-shadow:0_0_10px_rgba(137,17,179,0.8),0_0_20px_rgba(137,17,179,0.6),0_0_40px_rgba(137,17,179,0.4)]">
           {textContent}
@@ -114,3 +114,13 @@ import WaveBg from './WaveBg.jsx';
     </div>
   </div>
 </footer>
+
+<script>
+  (function () {
+    document.querySelectorAll('.vip-secret-trigger').forEach(function (el) {
+      el.addEventListener('click', function () {
+        window.dispatchEvent(new CustomEvent('trigger-vip-egg'));
+      });
+    });
+  })();
+</script>

@@ -1,5 +1,11 @@
 ---
 import '../index.css';
+import EasterEggVIP from '../components/EasterEggVIP.tsx';
+import eventsBg from '../assets/events_background.webp';
+import kalyaniBg from '../assets/kalyani_background_2.webp';
+import bohmeFont from '../assets/fonts/bohme/Bohme.ttf';
+import myriadRegular from '../assets/fonts/myriad-pro/MYRIADPRO-REGULAR.OTF';
+import myriadBold from '../assets/fonts/myriad-pro/MYRIADPRO-BOLD.OTF';
 ---
 
 <!doctype html>
@@ -10,6 +16,10 @@ import '../index.css';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="image" href={kalyaniBg.src} />
+    <link rel="preload" as="font" href={bohmeFont} crossorigin type="font/ttf" />
+    <link rel="preload" as="font" href={myriadRegular} crossorigin type="font/otf" />
+    <link rel="preload" as="font" href={myriadBold} crossorigin type="font/otf" />
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Anton&family=Anton+SC&display=swap" />
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap" />
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sedgwick+Ave&family=Sedgwick+Ave+Display&display=swap" />
@@ -25,7 +35,10 @@ import '../index.css';
     <title>Disha '26</title>
   </head>
   <body class="bg-black">
-    <slot />
+    <div id="page-freeze-zone">
+      <slot />
+    </div>
+    <EasterEggVIP client:idle imageUrls={[eventsBg.src, kalyaniBg.src]} />
   </body>
 </html>
 
