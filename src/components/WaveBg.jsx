@@ -8,9 +8,7 @@ export default function WaveBg() {
   useEffect(() => {
     const shouldShow = Math.random() < 0.1;
     setShow(shouldShow);
-    if (shouldShow) {
-      console.log('Congratulations! You have found an Easter egg!');
-    }
+    if (shouldShow) {}
   }, []);
 
   return (

@@ -1,6 +1,8 @@
 ---
 import '../index.css';
-import EasterEggVIP from '../components/EasterEggVIP.astro';
+import EasterEggVIP from '../components/EasterEggVIP.tsx';
+import eventsBg from '../assets/events_background.webp';
+import kalyaniBg from '../assets/kalyani_background_2.webp';
 ---
 
 <!doctype html>
@@ -29,7 +31,7 @@ import EasterEggVIP from '../components/EasterEggVIP.astro';
     <div id="page-freeze-zone">
       <slot />
     </div>
-    <EasterEggVIP />
+    <EasterEggVIP client:load imageUrls={[eventsBg.src, kalyaniBg.src]} />
   </body>
 </html>
 
