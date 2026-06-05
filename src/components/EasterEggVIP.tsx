@@ -151,8 +151,10 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
     setProcessing(true)
     const savedTransform = el.style.transform
     const savedTransformStyle = el.style.transformStyle
+    const savedWidth = el.style.width
     el.style.transform = "none"
     el.style.transformStyle = "flat"
+    el.style.width = "340px"
 
     try {
       const { toBlob } = await import("html-to-image")
@@ -189,6 +191,7 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
     } finally {
       el.style.transform = savedTransform
       el.style.transformStyle = savedTransformStyle
+      el.style.width = savedWidth
       setProcessing(false)
     }
   }
@@ -214,11 +217,11 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
       lockScroll
       layoutId="vip-screen"
       triggerRadius="100px"
-      contentRadius="0px"
+      contentRadius="24px"
       animationDuration={0.35}
     >
       <ExpandableScreenContent
-        className="bg-[#050505] border-0 rounded-none"
+        className="bg-[#050505] border border-zinc-700/60 w-[80vw] h-[80vh] lg:w-[65vw] lg:h-[65vh]"
         closeButtonClassName="text-white bg-zinc-800/80 hover:bg-zinc-700 border border-zinc-700"
       >
         {step === "ledger" ? (

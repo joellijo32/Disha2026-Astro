@@ -7,4 +7,7 @@ export default defineConfig({
   vite: {
     envPrefix: ['VITE_', 'PUBLIC_'],
   },
+  build: {
+    inlineStylesheets: 'always',
+  },
 });

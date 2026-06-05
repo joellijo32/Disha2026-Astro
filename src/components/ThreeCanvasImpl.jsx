@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState, forwardRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { wrapEffect } from '@react-three/postprocessing';
 import { Effect } from 'postprocessing';
-import * as THREE from 'three';
+import { Uniform, Vector2, Color } from 'three';
 
 const _origConsoleWarn = console.warn.bind(console);
 console.warn = (msg, ...args) => {
@@ -142,8 +142,8 @@ void mainImage(in vec4 inputColor, in vec2 uv, out vec4 outputColor) {
 class RetroEffectImpl extends Effect {
   constructor() {
     const uniforms = new Map([
-      ['colorNum', new THREE.Uniform(4.0)],
-      ['pixelSize', new THREE.Uniform(2.0)]
+      ['colorNum', new Uniform(4.0)],
+      ['pixelSize', new Uniform(2.0)]
     ]);
     super('RetroEffect', ditherFragmentShader, { uniforms });
     this.uniforms = uniforms;
@@ -184,8 +184,8 @@ function DitheredWaves({
   const mesh = useRef(null);
   const prevColor = useRef([...waveColor]);
 
-  const targetMouse = useRef(new THREE.Vector2(-1000, -1000));
-  const smoothMouse = useRef(new THREE.Vector2(-1000, -1000));
+  const targetMouse = useRef(new Vector2(-1000, -1000));
+  const smoothMouse = useRef(new Vector2(-1000, -1000));
 
   const { viewport, size, gl } = useThree();
 
@@ -194,12 +194,12 @@ function DitheredWaves({
 
   const waveUniformsRef = useRef({
     time: { value: 0 },
-    resolution: { value: new THREE.Vector2(0, 0) },
+    resolution: { value: new Vector2(0, 0) },
     waveSpeed: { value: waveSpeed },
     waveFrequency: { value: waveFrequency },
     waveAmplitude: { value: waveAmplitude },
-    waveColor: { value: new THREE.Color(...waveColor) },
-    mousePos: { value: new THREE.Vector2(-1000, -1000) },
+    waveColor: { value: new Color(...waveColor) },
+    mousePos: { value: new Vector2(-1000, -1000) },
     enableMouseInteraction: { value: activeMouseInteraction ? 1.0 : 0.0 },
     mouseRadius: { value: mouseRadius }
   });

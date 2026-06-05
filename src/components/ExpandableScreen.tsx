@@ -175,13 +175,21 @@ export function ExpandableScreenContent({
   return (
     <AnimatePresence initial={false}>
       {isExpanded && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-2">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center">
           <motion.div
-            layoutId={layoutId}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: animationDuration }}
+            className="absolute inset-0 bg-black/95"
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: animationDuration }}
             style={{ borderRadius: contentRadius }}
-            layout
-            className={`relative flex h-full w-full overflow-y-auto transform-gpu will-change-transform ${className}`}
+            className={`relative flex overflow-y-auto transform-gpu will-change-transform ${className}`}
           >
             <motion.div
               initial={{ opacity: 0 }}

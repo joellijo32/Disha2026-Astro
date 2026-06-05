@@ -104,13 +104,16 @@ const REAL_EVENTS_DATA = [
     }
 
     function setup() {
-      maxScroll = getScrollAmount();
-      spacer.style.height = maxScroll + 'px';
-
+      var newMaxScroll = getScrollAmount();
       var eventsSection = section.parentElement;
-      sectionTop = eventsSection.getBoundingClientRect().top + window.scrollY;
-      scrollPos = Math.max(0, Math.min(window.scrollY - sectionTop, maxScroll));
-      applyTransform();
+      var newSectionTop = eventsSection.getBoundingClientRect().top + window.scrollY;
+      var newScrollPos = Math.max(0, Math.min(window.scrollY - newSectionTop, newMaxScroll));
+
+      maxScroll = newMaxScroll;
+      sectionTop = newSectionTop;
+      scrollPos = newScrollPos;
+      spacer.style.height = maxScroll + 'px';
+      wrapper.style.transform = 'translate3d(' + (-scrollPos) + 'px, 0px, 0px)';
     }
 
     function onScroll() {
