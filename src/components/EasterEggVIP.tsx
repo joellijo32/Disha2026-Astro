@@ -162,8 +162,8 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
         "maxTouchPoints" in navigator
           ? (navigator as any).maxTouchPoints > 2
           : /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
-              navigator.userAgent.toLowerCase()
-            )
+            navigator.userAgent.toLowerCase()
+          )
       const blob = await toBlob(el, {
         backgroundColor: "#050505",
         pixelRatio: isMobile ? 1.5 : 2.5,
@@ -246,7 +246,7 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
                   </label>
                   <input
                     type="text"
-                    placeholder="Your alias"
+                    placeholder="Your name"
                     autoComplete="off"
                     value={alias}
                     onChange={(e) => {
@@ -257,13 +257,13 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
                   />
                   {aliasError && (
                     <p className="text-[#DE005F] text-[0.55rem] tracking-[0.15em] mt-1 font-bohme">
-                      [ REQUIRED ]
+                      YOU SHALL NOT PASS!
                     </p>
                   )}
                 </div>
                 <div>
                   <label className="block text-zinc-500 text-[0.6rem] tracking-[0.2em] uppercase mb-2 font-bohme">
-                    Affiliation
+                    Codename
                   </label>
                   <input
                     type="text"
@@ -278,7 +278,7 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
                   />
                   {affiliationError && (
                     <p className="text-[#DE005F] text-[0.55rem] tracking-[0.15em] mt-1 font-bohme">
-                      [ REQUIRED ]
+                      YOU SHALL NOT PASS!
                     </p>
                   )}
                 </div>
@@ -288,7 +288,7 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
                 onClick={handleSubmit}
                 className="w-full mt-8 py-3 bg-[#DE005F] text-white text-[0.75rem] tracking-[0.15em] font-bold uppercase transition-all duration-200 hover:brightness-110 hover:shadow-[0_0_20px_rgba(222,0,95,0.4)] font-bohme"
               >
-                [ SLIP PAST SECURITY ]
+                ENTER THE BACKROOMS..
               </button>
             </div>
           </div>
@@ -391,7 +391,7 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-zinc-500 text-[0.55rem] tracking-[0.2em] uppercase font-bohme">
-                        Affiliation
+                        Codename
                       </span>
                       <span
                         className="text-white text-[0.85rem] text-right tracking-[0.05em]"
