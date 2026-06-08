@@ -7,17 +7,16 @@ const words = ABOUT_TEXT.split(' ');
 <section id="about" class="relative min-h-screen bg-[#000000] py-24 md:py-32 overflow-hidden">
   <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#DE005F]/15 via-[#10152B]/90 to-[#000000] z-0 opacity-50"></div>
 
-  <div class="absolute top-0 right-0 w-[70%] md:w-[40%] h-[50%] bg-[radial-gradient(#DE005F_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(circle_at_top_right,black,transparent)] z-[5] opacity-40 pointer-events-none"></div>
+  <div class="absolute top-0 right-0 w-[70%] md:w-[40%] h-[50%] bg-[radial-gradient(#DE005F_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(circle_at_top_right,black,transparent)] z-[5] opacity-50 pointer-events-none"></div>
 
-  <div class="absolute bottom-0 left-0 w-[70%] md:w-[40%] h-[50%] bg-[radial-gradient(#B829EA_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(circle_at_bottom_left,black,transparent)] z-[5] opacity-40 pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-[70%] md:w-[40%] h-[50%] bg-[radial-gradient(#B829EA_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(circle_at_bottom_left,black,transparent)] z-[5] opacity-50 pointer-events-none"></div>
 
-  <div class="absolute bottom-0 left-0 w-[70%] md:w-[40%] h-[50%] bg-[radial-gradient(circle,#B829EA_1px,transparent_1px)] bg-[size:16px_16px] [mask-image:radial-gradient(circle_at_bottom_left,black_30%,transparent)] z-30 opacity-70 pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-[70%] md:w-[40%] h-[50%] bg-[radial-gradient(circle,#B829EA_1px,transparent_1px)] bg-[size:16px_16px] [mask-image:radial-gradient(circle_at_bottom_left,black_30%,transparent)] z-30 opacity-50 pointer-events-none"></div>
 
 
   <div class="relative z-10 max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-center lg:gap-24">
     <div class="w-full lg:w-1/2 flex items-center justify-center lg:justify-end mb-12 lg:mb-0 lg:-ml-20 lg:pb-40">
       <div class="relative inline-block">
-        <div class="absolute -inset-[10px] z-5 opacity-20 mix-blend-overlay pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] bg-[size:6px_6px] scanline-move"></div>
         <img
           src={kalyaniforwebAsset.src}
           alt="Illustrated version of the Kalyani character"
@@ -63,14 +62,6 @@ const words = ABOUT_TEXT.split(' ');
   }
   .reveal-on-scroll.visible {
     opacity: 1;
-  }
-  @keyframes scanline {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(2px, 2px); }
-  }
-  .scanline-move {
-    animation: scanline 0.5s linear infinite;
-    will-change: transform;
   }
   .kalyaniforweb-reveal {
     opacity: 0;
