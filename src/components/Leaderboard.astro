@@ -108,7 +108,7 @@ import eventsBackground from '../assets/events_background.webp';
       container.innerHTML = data
         .map(
           (row, i) => `
-        <div class="leader-row group relative flex items-center justify-between px-6 py-4 md:px-8 md:py-5 border-b border-white/5 last:border-b-0 transition-colors duration-200 hover:bg-[#7e22ce]/20 ${i % 2 === 0 ? 'bg-transparent' : 'bg-black/20'}">
+        <div class="leader-row group relative flex items-center justify-between px-6 py-10 md:px-8 border-b border-white/5 last:border-b-0 transition-colors duration-200 hover:bg-[#7e22ce]/20 ${i % 2 === 0 ? 'bg-transparent' : 'bg-black/20'}">
           <div class="flex items-center gap-4 md:gap-6">
             <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 border border-white/5 flex items-center justify-center font-black text-lg md:text-xl shadow-inner font-bohme ${i === 0 ? 'text-[#DE005F]' : i === 1 ? 'text-[#b829ea]' : i === 2 ? 'text-[#7e22ce]' : 'text-white/40'}">${i + 1}</div>
             <p class="text-sm md:text-lg font-bold uppercase tracking-normal text-white/90 truncate max-w-[180px] md:max-w-md font-bohme">${row.department}</p>

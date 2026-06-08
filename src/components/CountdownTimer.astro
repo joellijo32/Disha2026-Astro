@@ -1,0 +1,152 @@
+---
+interface Props {
+  targetDate?: string;
+  class?: string;
+}
+
+const { targetDate = '2026-07-17T09:00:00' } = Astro.props;
+---
+
+<div class="countdown-timer" data-target={targetDate}>
+  <span class="timer-unit" data-unit="D">
+    <span class="timer-value">00</span>
+    <span class="timer-label">D</span>
+  </span>
+  <span class="timer-colon">:</span>
+  <span class="timer-unit" data-unit="H">
+    <span class="timer-value">00</span>
+    <span class="timer-label">H</span>
+  </span>
+  <span class="timer-colon">:</span>
+  <span class="timer-unit" data-unit="M">
+    <span class="timer-value">00</span>
+    <span class="timer-label">M</span>
+  </span>
+  <span class="timer-colon">:</span>
+  <span class="timer-unit" data-unit="S">
+    <span class="timer-value">00</span>
+    <span class="timer-label">S</span>
+  </span>
+</div>
+
+<style>
+  .countdown-timer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  @media (min-width: 768px) {
+    .countdown-timer {
+      gap: 1rem;
+    }
+  }
+  .timer-unit {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.35em;
+    line-height: 1;
+  }
+  .timer-value {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (min-width: 768px) {
+    .timer-value {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .timer-value {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+  }
+  .timer-label {
+    color: #B829EA;
+    font-weight: 900;
+    font-size: 10px;
+    letter-spacing: -0.05em;
+  }
+  @media (min-width: 768px) {
+    .timer-label {
+      font-size: 12px;
+    }
+  }
+  .timer-colon {
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 900;
+  }
+</style>
+
+<script>
+  (function () {
+    var TIMER_INSTANCES = [];
+
+    function CountdownTimer(el) {
+      this.el = el;
+      var raw = el.getAttribute('data-target');
+      if (raw && !/[\+\-]\d{2}:\d{2}$/.test(raw) && !raw.endsWith('Z')) {
+        raw += '+05:30';
+      }
+      this.target = new Date(raw).getTime();
+      this.units = el.querySelectorAll('.timer-unit');
+      this.values = new Array(this.units.length);
+      this.interval = null;
+      this.boundUpdate = this.update.bind(this);
+      this.start();
+    }
+
+    CountdownTimer.prototype.update = function () {
+      var diff = this.target - Date.now();
+      if (diff <= 0) {
+        this.el.dispatchEvent(new CustomEvent('timer:complete', { bubbles: true }));
+        this.destroy();
+        return;
+      }
+      this.values[0] = String(Math.floor(diff / 86400000)).padStart(2, '0');
+      this.values[1] = String(Math.floor((diff / 3600000) % 24)).padStart(2, '0');
+      this.values[2] = String(Math.floor((diff / 60000) % 60)).padStart(2, '0');
+      this.values[3] = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+      for (var i = 0; i < this.units.length; i++) {
+        this.units[i].querySelector('.timer-value').textContent = this.values[i];
+      }
+    };
+
+    CountdownTimer.prototype.start = function () {
+      this.update();
+      this.interval = setInterval(this.boundUpdate, 1000);
+    };
+
+    CountdownTimer.prototype.destroy = function () {
+      if (this.interval) {
+        clearInterval(this.interval);
+        this.interval = null;
+      }
+    };
+
+    function init() {
+      document.querySelectorAll('.countdown-timer').forEach(function (el) {
+        if (el._timer) return;
+        var timer = new CountdownTimer(el);
+        el._timer = timer;
+        TIMER_INSTANCES.push(timer);
+      });
+    }
+
+    init();
+
+    function cleanupAll() {
+      for (var i = 0; i < TIMER_INSTANCES.length; i++) {
+        TIMER_INSTANCES[i].destroy();
+      }
+      TIMER_INSTANCES = [];
+    }
+
+    window.__countdownTimerInit = init;
+    window.__countdownTimerCleanup = cleanupAll;
+  })();
+</script>

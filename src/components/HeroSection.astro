@@ -1,6 +1,7 @@
 ---
 import heroBg from '../assets/kalyani_background_2.webp';
 import dishaLogo from '../assets/disha_logo.webp';
+import CountdownTimer from './CountdownTimer.astro';
 ---
 
 <div id="home" class="relative h-[85svh] md:h-screen w-full bg-[#10152B] text-white flex flex-col font-sans overflow-hidden">
@@ -78,33 +79,15 @@ import dishaLogo from '../assets/disha_logo.webp';
 
   <main class="relative z-20 flex flex-col items-center justify-center grow px-4 text-center -mt-16 md:-mt-16 lg:-mt-24">
     <div class="relative mb-6 md:mb-10 w-fit mx-auto whitespace-nowrap z-0 flex items-center justify-center">
-      <h1 class="absolute z-0 text-8xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] text-[#DE005F] [-webkit-text-stroke:10px_#DE005F] md:[-webkit-text-stroke:18px_#DE005F] drop-shadow-[0_0_15px_rgba(222,0,95,0.8)]">
+      <h1 class="absolute z-0 text-8xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] text-white [-webkit-text-stroke:10px_white] md:[-webkit-text-stroke:18px_white] drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]">
         Disha '26
       </h1>
-      <h1 class="relative z-20 text-8xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] text-white">
+      <h1 class="relative z-20 text-8xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] text-[#DE005F]">
         Disha '26
       </h1>
     </div>
-    <div class="text-lg md:text-2xl lg:text-3xl font-black uppercase tracking-widest flex items-center gap-2 md:gap-4 bg-[#1a1525]/90 px-6 py-3 md:px-8 md:py-4 rounded-full border border-white/5 relative z-10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
-      <span class="timer-unit" data-unit="D">
-        <span class="timer-value">00</span>
-        <span class="text-[#B829EA] font-black text-[10px] md:text-xs tracking-tighter">D</span>
-      </span>
-      <span class="text-white opacity-40 timer-colon">:</span>
-      <span class="timer-unit" data-unit="H">
-        <span class="timer-value">00</span>
-        <span class="text-[#B829EA] font-black text-[10px] md:text-xs tracking-tighter">H</span>
-      </span>
-      <span class="text-white opacity-40 timer-colon">:</span>
-      <span class="timer-unit" data-unit="M">
-        <span class="timer-value">00</span>
-        <span class="text-[#B829EA] font-black text-[10px] md:text-xs tracking-tighter">M</span>
-      </span>
-      <span class="text-white opacity-40 timer-colon">:</span>
-      <span class="timer-unit" data-unit="S">
-        <span class="timer-value">00</span>
-        <span class="text-[#B829EA] font-black text-[10px] md:text-xs tracking-tighter">S</span>
-      </span>
+    <div id="timer-wrapper" class="bg-[#1a1525]/90 px-6 py-3 md:px-8 md:py-4 rounded-full border border-white/5 relative z-10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+      <CountdownTimer targetDate="2026-07-17T09:00:00" />
     </div>
     <a href="https://forms.gle/jHP7ByHxjmZ2psXv8" target="_blank" rel="noopener noreferrer" class="mt-8 px-12 py-3.5 bg-[#DE005F] text-white text-sm font-bold uppercase tracking-[0.2em] hover:bg-[#b8004e] active:scale-95 transition-all duration-200 select-none whitespace-nowrap relative z-10 shadow-xl font-bohme inline-block">
       Register
@@ -115,7 +98,7 @@ import dishaLogo from '../assets/disha_logo.webp';
     <div class="inline-flex gap-12 md:gap-24 pr-12 md:pr-24 ticker-track">
       {Array.from({ length: 12 }, (_, i) => (
         <span key={i} class="text-xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider font-bohme shrink-0">
-          THE BIGGEST FRESHERS FEST <span class="text-[#DE005F]">COMING SOON!</span>
+          THE BIGGEST FRESHERS FEST <span class="text-[#DE005F] ticker-status">COMING SOON!</span>
         </span>
       ))}
     </div>
@@ -163,35 +146,6 @@ import dishaLogo from '../assets/disha_logo.webp';
 </style>
 
   <script>
-  // --- Countdown Timer (batched DOM) ---
-  const TARGET = new Date('2026-03-27T00:00:00').getTime();
-  var timerUnits = document.querySelectorAll('.timer-unit');
-  var timerValues = [];
-
-  function updateTimer() {
-    const now = Date.now();
-    const diff = Math.max(0, TARGET - now);
-    var d = Math.floor(diff / (1000 * 60 * 60 * 24));
-    var h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    var m = Math.floor((diff / 1000 / 60) % 60);
-    var s = Math.floor((diff / 1000) % 60);
-
-    timerValues[0] = d.toString().padStart(2, '0');
-    timerValues[1] = h.toString().padStart(2, '0');
-    timerValues[2] = m.toString().padStart(2, '0');
-    timerValues[3] = s.toString().padStart(2, '0');
-
-    for (var i = 0; i < timerUnits.length; i++) {
-      timerUnits[i].querySelector('.timer-value').textContent = timerValues[i];
-    }
-  }
-
-  if (timerUnits.length) {
-    timerValues = new Array(timerUnits.length);
-    updateTimer();
-    setInterval(updateTimer, 1000);
-  }
-
   // --- Mobile Menu ---
   const menuToggle = document.getElementById('menu-toggle');
   const overlay = document.getElementById('mobile-overlay');
@@ -274,4 +228,13 @@ import dishaLogo from '../assets/disha_logo.webp';
     );
     observer.observe(heroEl);
   }
+
+  // --- Timer complete handler ---
+  document.addEventListener('timer:complete', function () {
+    var timerWrapper = document.getElementById('timer-wrapper');
+    if (timerWrapper) timerWrapper.style.display = 'none';
+    document.querySelectorAll('.ticker-status').forEach(function (el) {
+      el.textContent = 'IS LIVE!';
+    });
+  });
 </script>
