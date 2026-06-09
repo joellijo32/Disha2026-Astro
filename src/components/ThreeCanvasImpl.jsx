@@ -292,6 +292,7 @@ function DitherCanvas({
 }) {
   const containerRef = useRef(null);
   const [isVisible, setIsVisible] = useState(true);
+  const [pageFrozen, setPageFrozen] = useState(false);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -303,6 +304,12 @@ function DitherCanvas({
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const handler = (e) => setPageFrozen(e.detail.frozen)
+    window.addEventListener("freeze-page-animations", handler)
+    return () => window.removeEventListener("freeze-page-animations", handler)
+  }, [])
 
   return (
     <div ref={containerRef} className="w-full h-full relative">
@@ -323,7 +330,7 @@ function DitherCanvas({
           waveColor={waveColor}
           colorNum={colorNum}
           pixelSize={pixelSize}
-          disableAnimation={disableAnimation || !isVisible}
+          disableAnimation={disableAnimation || !isVisible || pageFrozen}
           enableMouseInteraction={enableMouseInteraction && isVisible}
           mouseRadius={mouseRadius}
         />
