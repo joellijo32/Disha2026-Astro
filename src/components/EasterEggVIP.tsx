@@ -266,18 +266,6 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
         // File share cancelled or failed — fall through to download
       }
 
-      try {
-        if (navigator.share) {
-          await navigator.share({
-            title: "Disha '26",
-            text: "Here's my Disha 2026 VIP Pass, where's yours?",
-          })
-          return
-        }
-      } catch {
-        // Text share cancelled — fall through to download
-      }
-
       downloadBlob(blob)
     } catch (err) {
       console.error("Easter Egg capture failed:", err)
