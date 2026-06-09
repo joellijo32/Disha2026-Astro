@@ -1,7 +1,7 @@
 ---
 import heroBg from '../assets/kalyani_background_2.webp';
 import dishaLogo from '../assets/disha_logo.webp';
-import CountdownTimer from './CountdownTimer.astro';
+// import CountdownTimer from './CountdownTimer.astro';
 import LiquidChrome from './LiquidChrome';
 ---
 
@@ -80,21 +80,19 @@ import LiquidChrome from './LiquidChrome';
     </div>
   </div>
 
-<main class="relative z-20 flex flex-col items-center justify-center grow px-4 text-center -mt-16 md:-mt-16 lg:-mt-24">
-  <div class="relative mb-6 md:mb-10 w-fit mx-auto whitespace-nowrap z-0 flex items-center justify-center">
+  <main class="relative z-20 flex flex-col items-center justify-center grow px-4 text-center -mt-16 md:-mt-16 lg:-mt-24">
     <div class="relative mb-6 md:mb-10 w-fit mx-auto whitespace-nowrap z-0 flex items-center justify-center">
       <div class="absolute -inset-x-12 -inset-y-6 bg-[radial-gradient(ellipse_at_center,_rgba(0,0,0,0.9)_30%,_transparent_85%)] blur-xl z-10 pointer-events-none"></div>
       
-      <h1 class="relative z-20 [text-shadow:0_0_15px_#cc007c,4px_4px_20px_rgba(0,0,0,1)] text-8xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] text-[#cc007c]">
-        Disha '26
-      </h1>
+<h1 class="relative z-20 text-[#cc007c] [-webkit-text-stroke:2px_#000] [text-shadow:4px_4px_0px_#000,8px_8px_25px_rgba(0,0,0,0.9)] text-[7rem] md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive]">
+  Disha '26
+</h1>
     </div>
-  </div>
-  
-  <a href="https://forms.gle/jHP7ByHxjmZ2psXv8" target="_blank" rel="noopener noreferrer" class="mt-8 px-12 py-3.5 bg-[#DE005F] text-white text-sm font-bold uppercase tracking-[0.2em] hover:bg-[#b8004e] active:scale-95 transition-all duration-200 select-none whitespace-nowrap relative z-10 shadow-xl font-bohme inline-block">
-    Register
-  </a>
-</main>
+
+    <a href="https://forms.gle/jHP7ByHxjmZ2psXv8" target="_blank" rel="noopener noreferrer" class="mt-8 px-12 py-3.5 bg-[#DE005F] text-white text-sm font-bold uppercase tracking-[0.2em] hover:bg-[#b8004e] active:scale-95 transition-all duration-200 select-none whitespace-nowrap relative z-10 shadow-xl font-bohme inline-block">
+      Register
+    </a>
+  </main>
 
   <div class="absolute bottom-[16%] md:bottom-[10%] lg:bottom-[8%] z-20 w-[120%] -ml-[10%] overflow-hidden whitespace-nowrap py-4 md:py-6 bg-black/80 border-y-[3px] -rotate-2 shadow-2xl pointer-events-none">
     <div class="inline-flex gap-12 md:gap-24 pr-12 md:pr-24 ticker-track">
@@ -147,7 +145,7 @@ import LiquidChrome from './LiquidChrome';
   }
 </style>
 
-  <script>
+<script>
   // --- Mobile Menu ---
   const menuToggle = document.getElementById('menu-toggle');
   const overlay = document.getElementById('mobile-overlay');
@@ -199,15 +197,17 @@ import LiquidChrome from './LiquidChrome';
     }, 250);
   }
 
-  menuToggle.addEventListener('click', () => (menuOpen ? closeMenu() : openMenu()));
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) closeMenu();
-  });
-  document.querySelectorAll('.mobile-nav-link').forEach((a) => {
-    a.addEventListener('click', closeMenu);
-    a.style.opacity = '0';
-    a.style.transform = 'translateY(12px)';
-  });
+  if (menuToggle && overlay) {
+    menuToggle.addEventListener('click', () => (menuOpen ? closeMenu() : openMenu()));
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeMenu();
+    });
+    document.querySelectorAll('.mobile-nav-link').forEach((a) => {
+      a.addEventListener('click', closeMenu);
+      a.style.opacity = '0';
+      a.style.transform = 'translateY(12px)';
+    });
+  }
 
   // --- Pause scanline when off-screen ---
   var scanlineEl = document.querySelector('.scanline-move');
