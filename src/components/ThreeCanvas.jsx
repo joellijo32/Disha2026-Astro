@@ -16,7 +16,7 @@ export default function ThreeCanvas(props) {
           observer.disconnect();
         }
       },
-      { rootMargin: '800px' }
+      { rootMargin: '450px' }
     );
     observer.observe(el);
     return () => observer.disconnect();
