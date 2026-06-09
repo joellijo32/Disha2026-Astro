@@ -1,45 +1,102 @@
 import { useState, useRef, useEffect } from "react"
-import {
-  ExpandableScreen,
-  ExpandableScreenContent,
-} from "./ExpandableScreen"
+import { X } from "lucide-react"
+import PixelCard from "./PixelCard"
 
 interface EasterEggVIPProps {
   imageUrls?: string[]
 }
 
 export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [step, setStep] = useState<"ledger" | "artifact">("ledger")
+  const [phase, setPhase] = useState<
+    | "idle"
+    | "ledger"
+    | "transitioning"
+    | "artifact_pixelating"
+    | "artifact_revealed"
+  >("idle")
+
   const [alias, setAlias] = useState("")
   const [affiliation, setAffiliation] = useState("")
   const [aliasError, setAliasError] = useState(false)
   const [affiliationError, setAffiliationError] = useState(false)
   const [processing, setProcessing] = useState(false)
   const [bgImage, setBgImage] = useState("")
+  const [pixelate, setPixelate] = useState(true)
 
   const ticketRef = useRef<HTMLDivElement>(null)
   const glareRef = useRef<HTMLDivElement>(null)
-  const glitchRef = useRef<HTMLDivElement>(null)
 
-  // Pick random image
   useEffect(() => {
     if (imageUrls.length > 0 && !bgImage) {
       setBgImage(imageUrls[Math.floor(Math.random() * imageUrls.length)])
     }
   }, [imageUrls, bgImage])
 
-  // Support custom event trigger
   useEffect(() => {
-    const handler = () => setIsExpanded(true)
+    const handler = () => {
+      freezePage(true)
+      setPhase("ledger")
+    }
     window.addEventListener("trigger-vip-egg", handler)
     return () => window.removeEventListener("trigger-vip-egg", handler)
   }, [])
 
-  // Idle sway + user override
+  const freezePage = (freeze: boolean) => {
+    if (freeze) {
+      document.body.style.overflow = "hidden"
+      document.body.dataset.expanded = "true"
+      if (!document.getElementById("expanded-freeze-styles")) {
+        const style = document.createElement("style")
+        style.id = "expanded-freeze-styles"
+        style.textContent =
+          `body[data-expanded] #page-freeze-zone * { animation-play-state: paused !important; }`
+        document.head.appendChild(style)
+      }
+    } else {
+      document.body.style.overflow = ""
+      delete document.body.dataset.expanded
+      document.getElementById("expanded-freeze-styles")?.remove()
+    }
+  }
+
+  useEffect(() => {
+    if (phase === "transitioning") {
+      const t = setTimeout(() => {
+        setPhase("artifact_pixelating")
+        setPixelate(true)
+      }, 500)
+      return () => clearTimeout(t)
+    }
+  }, [phase])
+
+  useEffect(() => {
+    if (phase === "idle") {
+      freezePage(false)
+    }
+  }, [phase])
+
+  useEffect(() => {
+    if (phase === "artifact_pixelating") {
+      setPixelate(true)
+    }
+  }, [phase])
+
+  useEffect(() => {
+    if (phase === "idle") return
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleClose()
+    }
+    window.addEventListener("keydown", handler)
+    return () => window.removeEventListener("keydown", handler)
+  }, [phase])
+
   useEffect(() => {
     const el = ticketRef.current
-    if (!el || step !== "artifact") return
+    if (
+      !el ||
+      (phase !== "artifact_pixelating" && phase !== "artifact_revealed")
+    )
+      return
 
     let frameId: number
     let isInteracting = false
@@ -84,7 +141,8 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
       if (!isInteracting) return
       isInteracting = false
 
-      const t = ((performance.now() - startTime) / 1000) * IDLE_SPEED * Math.PI * 2
+      const t =
+        ((performance.now() - startTime) / 1000) * IDLE_SPEED * Math.PI * 2
       const targetY = Math.sin(t) * MAX_IDLE_Y
 
       el.style.transition = `transform ${SPRING_MS}ms cubic-bezier(0.34, 1.56, 0.64, 1)`
@@ -105,7 +163,7 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
       el.removeEventListener("pointermove", handleMove)
       el.removeEventListener("pointerleave", handleLeave)
     }
-  }, [step])
+  }, [phase])
 
   const handleSubmit = () => {
     const validAlias = alias.trim().length > 0
@@ -114,34 +172,46 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
     setAffiliationError(!validAffiliation)
     if (!validAlias || !validAffiliation) return
 
-    setStep("artifact")
+    setPhase("transitioning")
+  }
 
-    setTimeout(() => {
-      if (glitchRef.current) {
-        glitchRef.current.classList.add("vip-glitch")
-        setTimeout(
-          () => glitchRef.current?.classList.remove("vip-glitch"),
-          600
-        )
-      }
-    }, 50)
+  const handleCardReveal = () => {
+    if (phase === "artifact_pixelating" && pixelate) {
+      setPixelate(false)
+      setTimeout(() => {
+        setPhase("artifact_revealed")
+      }, 600)
+    }
+  }
+
+  const handleClose = () => {
+    freezePage(false)
+    setPhase("idle")
+    resetForm()
+  }
+
+  const resetForm = () => {
+    setAlias("")
+    setAffiliation("")
+    setAliasError(false)
+    setAffiliationError(false)
+    if (imageUrls.length > 0) {
+      setBgImage(imageUrls[Math.floor(Math.random() * imageUrls.length)])
+    }
   }
 
   const downloadBlob = (blob: Blob) => {
-    try {
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = "Disha26VIP_Pass.png"
-      document.body.appendChild(a)
-      a.click()
-      setTimeout(() => {
-        document.body.removeChild(a)
-        URL.revokeObjectURL(url)
-      }, 5000)
-    } catch (err) {
-      console.error("Download failed:", err)
-    }
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = "Disha26VIP_Pass.png"
+    a.style.display = "none"
+    document.body.appendChild(a)
+    a.click()
+    setTimeout(() => {
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    }, 1000)
   }
 
   const handleExtract = async () => {
@@ -156,17 +226,23 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
     el.style.transformStyle = "flat"
     el.style.width = "340px"
 
+    const cardImg = el.querySelector("img")
+    if (cardImg && !cardImg.complete) {
+      await new Promise<void>((resolve) => {
+        cardImg.onload = () => resolve()
+        cardImg.onerror = () => resolve()
+      })
+    }
+
     try {
-      const { toBlob } = await import("html-to-image")
-      const isMobile =
-        "maxTouchPoints" in navigator
-          ? (navigator as any).maxTouchPoints > 2
-          : /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
-            navigator.userAgent.toLowerCase()
-          )
+      const { toBlob } = await import("html-to-image").catch(() => null)
+      if (!toBlob) {
+        console.warn("Capture library unavailable")
+        return
+      }
       const blob = await toBlob(el, {
         backgroundColor: "#050505",
-        pixelRatio: isMobile ? 1.5 : 2.5,
+        pixelRatio: 2,
         fontEmbedCSS: "",
         skipFonts: true,
       })
@@ -177,15 +253,32 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
         type: "image/png",
       })
 
-      if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: "Disha '26",
-          text: "Here's my Disha 2026 VIP Pass, where's yours?",
-        })
-      } else {
-        downloadBlob(blob)
+      try {
+        if (navigator.canShare?.({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "Disha '26",
+            text: "Here's my Disha 2026 VIP Pass, where's yours?",
+          })
+          return
+        }
+      } catch {
+        // File share cancelled or failed — fall through to download
       }
+
+      try {
+        if (navigator.share) {
+          await navigator.share({
+            title: "Disha '26",
+            text: "Here's my Disha 2026 VIP Pass, where's yours?",
+          })
+          return
+        }
+      } catch {
+        // Text share cancelled — fall through to download
+      }
+
+      downloadBlob(blob)
     } catch (err) {
       console.error("Easter Egg capture failed:", err)
     } finally {
@@ -196,141 +289,147 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
     }
   }
 
-  const reset = () => {
-    setStep("ledger")
-    setAlias("")
-    setAffiliation("")
-    setAliasError(false)
-    setAffiliationError(false)
-    if (imageUrls.length > 0) {
-      setBgImage(imageUrls[Math.floor(Math.random() * imageUrls.length)])
-    }
-  }
-
   return (
-    <ExpandableScreen
-      expanded={isExpanded}
-      onExpandChange={(expanded) => {
-        setIsExpanded(expanded)
-        if (!expanded) reset()
-      }}
-      lockScroll
-      layoutId="vip-screen"
-      triggerRadius="100px"
-      contentRadius="24px"
-      animationDuration={0.35}
-    >
-      <ExpandableScreenContent
-        className="bg-[#050505] border border-zinc-700/60 w-[80vw] h-[80vh] lg:w-[65vw] lg:h-[65vh]"
-        closeButtonClassName="text-white bg-zinc-800/80 hover:bg-zinc-700 border border-zinc-700"
-      >
-        {step === "ledger" ? (
-          <div className="flex items-center justify-center min-h-full p-4">
-            <div className="bg-[#0a0a0a] border border-[#B829EA] w-full max-w-md mx-auto p-8">
-              <div className="text-center mb-8">
-                <p className="text-[#DE005F] text-[0.6rem] tracking-[0.3em] font-bold uppercase font-bohme">
-                  Restricted Access
-                </p>
-                <h3 className="text-white text-[1.25rem] font-bold mt-1 tracking-tight">
-                  Disha '26 VIP Pass
-                </h3>
-                <p className="text-zinc-500 text-[0.7rem] mt-2">
-                  The universe chose you, to join the syndicate.
-                </p>
-              </div>
+    <>
+      <style>{`
+        @keyframes bgPan {
+          0% { background-position: 0% 0%; }
+          100% { background-position: 100% 100%; }
+        }
+        .bg-pan {
+          background: repeating-linear-gradient(
+            135deg,
+            #0a0a0a 0%,
+            #1a1525 25%,
+            #2d0a3d 50%,
+            #1a1525 75%,
+            #0a0a0a 100%
+          );
+          background-size: 200% 200%;
+          animation: bgPan 12s linear infinite;
+        }
+        .bg-card-pan {
+          background: linear-gradient(
+            135deg,
+            #0a0a0a,
+            #1a1525,
+            #2d0a3d
+          );
+        }
+        @keyframes formEnter {
+          from { opacity: 0; transform: translateY(12px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .form-enter {
+          animation: formEnter 0.3s ease-out forwards;
+        }
+        #vip-ticket {
+          contain: layout style;
+        }
+      `}</style>
 
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-zinc-500 text-[0.6rem] tracking-[0.2em] uppercase mb-2 font-bohme">
-                    Alias
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Your name"
-                    autoComplete="off"
-                    value={alias}
-                    onChange={(e) => {
-                      setAlias(e.target.value)
-                      setAliasError(false)
-                    }}
-                    className="w-full bg-transparent border-0 border-b-2 border-zinc-700 text-white text-[0.85rem] pb-2 outline-none focus:border-[#DE005F] transition-colors placeholder:text-zinc-600 rounded-none"
-                  />
-                  {aliasError && (
-                    <p className="text-[#DE005F] text-[0.55rem] tracking-[0.15em] mt-1 font-bohme">
-                      YOU SHALL NOT PASS!
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-zinc-500 text-[0.6rem] tracking-[0.2em] uppercase mb-2 font-bohme">
-                    Codename
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Your codename"
-                    autoComplete="off"
-                    value={affiliation}
-                    onChange={(e) => {
-                      setAffiliation(e.target.value)
-                      setAffiliationError(false)
-                    }}
-                    className="w-full bg-transparent border-0 border-b-2 border-zinc-700 text-white text-[0.85rem] pb-2 outline-none focus:border-[#DE005F] transition-colors placeholder:text-zinc-600 rounded-none"
-                  />
-                  {affiliationError && (
-                    <p className="text-[#DE005F] text-[0.55rem] tracking-[0.15em] mt-1 font-bohme">
-                      YOU SHALL NOT PASS!
-                    </p>
-                  )}
-                </div>
-              </div>
+      {(phase === "ledger" ||
+        phase === "transitioning" ||
+        phase === "artifact_pixelating" ||
+        phase === "artifact_revealed") && (
+        <div className="fixed inset-0 z-40 pointer-events-none bg-pan" />
+      )}
 
-              <button
-                onClick={handleSubmit}
-                className="w-full mt-8 py-3 bg-[#DE005F] text-white text-[0.75rem] tracking-[0.15em] font-bold uppercase transition-all duration-200 hover:brightness-110 hover:shadow-[0_0_20px_rgba(222,0,95,0.4)] font-bohme"
-              >
-                ENTER THE BACKROOMS..
-              </button>
+      {(phase === "ledger" ||
+        phase === "artifact_pixelating" ||
+        phase === "artifact_revealed") && (
+        <button
+          onClick={handleClose}
+          className="fixed right-6 top-20 z-[70] flex h-10 w-10 items-center justify-center rounded-full text-white bg-zinc-700 hover:bg-[#DE005F] border border-zinc-600 hover:border-[#DE005F] shadow-[0_0_12px_rgba(222,0,95,0.15)] transition-all"
+          aria-label="Close"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      )}
+
+      {phase === "ledger" && (
+        <div className="fixed inset-x-0 top-[70px] bottom-0 z-50 flex items-center justify-center bg-transparent p-4 overflow-y-auto">
+          <div className="bg-[#0a0a0a] border border-[#B829EA] w-full max-w-md mx-auto p-8 form-enter">
+            <div className="text-center mb-8">
+              <p className="text-[#DE005F] text-[0.6rem] tracking-[0.3em] font-bold uppercase font-bohme">
+                Restricted Access
+              </p>
+              <h3 className="text-white text-[1.25rem] font-bold mt-1 tracking-tight">
+                Disha '26 VIP Pass
+              </h3>
+              <p className="text-zinc-500 text-[0.7rem] mt-2">
+                The universe chose you, to join the syndicate.
+              </p>
             </div>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center min-h-full p-4">
-            <style>{`
-              @keyframes vipGlitch {
-                0% { transform: translate(0); opacity: 1; }
-                10% { transform: translate(-3px, 2px) skewX(2deg); opacity: 0.7; }
-                20% { transform: translate(3px, -1px) skewX(-2deg); opacity: 0.8; }
-                30% { transform: translate(-2px, -2px) skewX(1deg); opacity: 0.6; }
-                40% { transform: translate(2px, 1px) skewX(-1deg); opacity: 1; }
-                50% { transform: translate(-1px, -1px); opacity: 0.9; }
-                60% { transform: translate(0); opacity: 1; }
-                100% { transform: translate(0); opacity: 1; }
-              }
-              @keyframes vipGlitchClip {
-                0% { clip-path: inset(0 0 98% 0); }
-                15% { clip-path: inset(0 0 85% 0); }
-                30% { clip-path: inset(20% 0 60% 0); }
-                45% { clip-path: inset(50% 0 30% 0); }
-                60% { clip-path: inset(80% 0 5% 0); }
-                75% { clip-path: inset(10% 0 70% 0); }
-                100% { clip-path: inset(0 0 0 0); }
-              }
-              .vip-glitch {
-                animation: vipGlitch 0.5s ease-in-out, vipGlitchClip 0.4s ease-in-out;
-              }
-              #vip-ticket {
-                contain: layout style;
-              }
-            `}</style>
 
-            <div
-              id="vip-ticket-wrapper"
-              style={{ perspective: "60rem" }}
-              className="relative w-full max-w-sm mx-auto p-4"
+            <div className="space-y-6">
+              <div>
+                <label className="block text-zinc-500 text-[0.6rem] tracking-[0.2em] uppercase mb-2 font-bohme">
+                  Alias
+                </label>
+                <input
+                  type="text"
+                  placeholder="Your name"
+                  autoComplete="off"
+                  value={alias}
+                  onChange={(e) => {
+                    setAlias(e.target.value)
+                    setAliasError(false)
+                  }}
+                  className="w-full bg-transparent border-0 border-b-2 border-zinc-700 text-white text-[0.85rem] pb-2 outline-none focus:border-[#DE005F] transition-colors placeholder:text-zinc-600 rounded-none"
+                />
+                {aliasError && (
+                  <p className="text-[#DE005F] text-[0.55rem] tracking-[0.15em] mt-1 font-bohme">
+                    YOU SHALL NOT PASS!
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block text-zinc-500 text-[0.6rem] tracking-[0.2em] uppercase mb-2 font-bohme">
+                  Codename
+                </label>
+                <input
+                  type="text"
+                  placeholder="Your codename"
+                  autoComplete="off"
+                  value={affiliation}
+                  onChange={(e) => {
+                    setAffiliation(e.target.value)
+                    setAffiliationError(false)
+                  }}
+                  className="w-full bg-transparent border-0 border-b-2 border-zinc-700 text-white text-[0.85rem] pb-2 outline-none focus:border-[#DE005F] transition-colors placeholder:text-zinc-600 rounded-none"
+                />
+                {affiliationError && (
+                  <p className="text-[#DE005F] text-[0.55rem] tracking-[0.15em] mt-1 font-bohme">
+                    YOU SHALL NOT PASS!
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <button
+              onClick={handleSubmit}
+              className="w-full mt-8 py-3 bg-[#DE005F] text-white text-[0.75rem] tracking-[0.15em] font-bold uppercase transition-all duration-200 hover:brightness-110 hover:shadow-[0_0_20px_rgba(222,0,95,0.4)] font-bohme"
             >
-              <div
-                ref={glitchRef}
-                className="absolute inset-0 z-20 pointer-events-none"
-              ></div>
+              ENTER THE BACKROOMS..
+            </button>
+          </div>
+        </div>
+      )}
+
+      {(phase === "artifact_pixelating" ||
+        phase === "artifact_revealed") && (
+        <div className="fixed inset-x-0 top-[70px] bottom-0 z-50 flex flex-col items-center justify-center p-4 overflow-y-auto">
+          <div
+            className="relative w-full max-w-sm mx-auto"
+            style={{ perspective: "60rem" }}
+          >
+            <PixelCard
+              pixelate={pixelate}
+              onClick={handleCardReveal}
+              speed={40}
+              variant="pink"
+            >
               <div
                 ref={ticketRef}
                 id="vip-ticket"
@@ -339,7 +438,7 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
                   touchAction: "none",
                   clipPath: "inset(0 round 28px)",
                 }}
-                className="group/cutout relative bg-[#0a0a0a] border border-zinc-800 rounded-[28px] select-none transition-transform duration-300 ease-out shadow-[0px_1px_2px_-1px_rgba(0,0,0,0.3),0px_4px_8px_-2px_rgba(0,0,0,0.2),0px_8px_16px_-4px_rgba(0,0,0,0.15)] hover:border-zinc-600 hover:shadow-[0px_2px_4px_-1px_rgba(0,0,0,0.4),0px_8px_16px_-4px_rgba(0,0,0,0.3),0px_16px_32px_-8px_rgba(0,0,0,0.2)]"
+                className="group/cutout relative bg-card-pan rounded-[28px] select-none transition-transform duration-300 ease-out shadow-[0_30px_80px_rgba(0,0,0,0.6),0_10px_30px_-5px_rgba(222,0,95,0.12)] hover:shadow-[0_40px_100px_rgba(0,0,0,0.7),0_15px_40px_-5px_rgba(222,0,95,0.2)]"
               >
                 <div
                   ref={glareRef}
@@ -350,31 +449,27 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
                     backgroundSize: "300% 300%",
                     backgroundPosition: "50% 50%",
                   }}
-                ></div>
-
+                />
                 <div className="relative overflow-hidden h-40 md:h-44">
                   {bgImage && (
                     <img
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/cutout:scale-105"
                       src={bgImage}
                       alt=""
-                      loading="lazy"
                     />
                   )}
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                 </div>
-
                 <div className="relative p-6">
                   <div className="text-center mb-5">
                     <p className="text-[#DE005F] text-[0.5rem] tracking-[0.3em] font-bold uppercase font-bohme">
                       VIP Access
                     </p>
-                    <div className="w-8 h-[1px] bg-[#DE005F] mx-auto my-3"></div>
+                    <div className="w-8 h-[1px] bg-[#DE005F] mx-auto my-3" />
                     <h3 className="text-white text-[1rem] font-bold tracking-tight font-bohme">
                       SYNDICATE MEMBER
                     </h3>
                   </div>
-
                   <div className="border-t border-b border-zinc-800 py-4 my-4 space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-zinc-500 text-[0.55rem] tracking-[0.2em] uppercase font-bohme">
@@ -403,7 +498,6 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
                       </span>
                     </div>
                   </div>
-
                   <div className="text-center mt-4">
                     <p className="text-[#DE005F] text-[0.5rem] tracking-[0.3em] font-bold font-bohme">
                       DISHA '26
@@ -414,8 +508,10 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
                   </div>
                 </div>
               </div>
-            </div>
+            </PixelCard>
+          </div>
 
+          {phase === "artifact_revealed" && (
             <button
               onClick={handleExtract}
               disabled={processing}
@@ -423,9 +519,9 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
             >
               {processing ? "[ PROCESSING... ]" : "[ EXTRACT & SHARE ]"}
             </button>
-          </div>
-        )}
-      </ExpandableScreenContent>
-    </ExpandableScreen>
+          )}
+        </div>
+      )}
+    </>
   )
 }
