@@ -2,16 +2,19 @@
 import heroBg from '../assets/kalyani_background_2.webp';
 import dishaLogo from '../assets/disha_logo.webp';
 import CountdownTimer from './CountdownTimer.astro';
+import LiquidChrome from './LiquidChrome';
 ---
 
 <div id="home" class="relative h-[85svh] md:h-screen w-full bg-[#10152B] text-white flex flex-col font-sans overflow-hidden">
-  <img
-    src={heroBg.src}
-    alt=""
-    class="absolute inset-0 w-full h-full object-cover z-0 opacity-40 pointer-events-none floating-bg"
-    aria-hidden="true"
-    fetchpriority="high"
-  />
+  <div class="absolute inset-0 z-0">
+    <LiquidChrome
+      baseColor={[0.1, 0.0, 0.15]}
+      speed={0.3}
+      amplitude={0.3}
+      interactive
+      client:load
+    />
+  </div>
 
   <div class="absolute -inset-[10px] z-5 opacity-25 mix-blend-overlay pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] bg-[size:6px_6px] scanline-move"></div>
 
@@ -77,28 +80,23 @@ import CountdownTimer from './CountdownTimer.astro';
     </div>
   </div>
 
-  <main class="relative z-20 flex flex-col items-center justify-center grow px-4 text-center -mt-16 md:-mt-16 lg:-mt-24">
-    <div class="relative mb-6 md:mb-10 w-fit mx-auto whitespace-nowrap z-0 flex items-center justify-center">
-      <h1 class="absolute z-0 text-8xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] text-white [-webkit-text-stroke:10px_white] md:[-webkit-text-stroke:18px_white] ">
-        DIsha '26
-      </h1>
-      <h1 class="relative z-20 text-8xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] text-[#cc007c]">
-        DIsha '26
-      </h1>
-    </div>
-    <div id="timer-wrapper" class="bg-[#1a1525]/90 px-6 py-3 md:px-8 md:py-4 rounded-full border border-white/5 relative z-10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
-      <CountdownTimer targetDate="2026-07-17T09:00:00" />
-    </div>
-    <a href="https://forms.gle/jHP7ByHxjmZ2psXv8" target="_blank" rel="noopener noreferrer" class="mt-8 px-12 py-3.5 bg-[#DE005F] text-white text-sm font-bold uppercase tracking-[0.2em] hover:bg-[#b8004e] active:scale-95 transition-all duration-200 select-none whitespace-nowrap relative z-10 shadow-xl font-bohme inline-block">
-      Register
-    </a>
-  </main>
+<main class="relative z-20 flex flex-col items-center justify-center grow px-4 text-center -mt-16 md:-mt-16 lg:-mt-24">
+  <div class="relative mb-6 md:mb-10 w-fit mx-auto whitespace-nowrap z-0 flex items-center justify-center">
+    <h1 class="relative z-20 [text-shadow:0_0_15px_#cc007c,4px_4px_20px_rgba(0,0,0,1)] text-8xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] text-[#cc007c]">
+      Disha '26
+    </h1>
+  </div>
+  
+  <a href="https://forms.gle/jHP7ByHxjmZ2psXv8" target="_blank" rel="noopener noreferrer" class="mt-8 px-12 py-3.5 bg-[#DE005F] text-white text-sm font-bold uppercase tracking-[0.2em] hover:bg-[#b8004e] active:scale-95 transition-all duration-200 select-none whitespace-nowrap relative z-10 shadow-xl font-bohme inline-block">
+    Register
+  </a>
+</main>
 
   <div class="absolute bottom-[16%] md:bottom-[10%] lg:bottom-[8%] z-20 w-[120%] -ml-[10%] overflow-hidden whitespace-nowrap py-4 md:py-6 bg-black/80 border-y-[3px] -rotate-2 shadow-2xl pointer-events-none">
     <div class="inline-flex gap-12 md:gap-24 pr-12 md:pr-24 ticker-track">
       {Array.from({ length: 12 }, (_, i) => (
         <span key={i} class="text-xl md:text-3xl lg:text-4xl font-black uppercase tracking-wider font-bohme shrink-0">
-          THE BIGGEST FRESHERS FEST <span class="text-[#DE005F] ticker-status [text-shadow:0_0_15px_#DE005F]">COMING SOON!</span>
+          THE BIGGEST <span class="text-[#DE005F] ticker-status [text-shadow:0_0_15px_#DE005F]">FRESHERS FEST</span>
         </span>
       ))}
     </div>
