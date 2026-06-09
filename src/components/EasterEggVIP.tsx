@@ -19,14 +19,12 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
   const [pixelate, setPixelate] = useState(true)
   const [cardVisible, setCardVisible] = useState(false)
   const [PCard, setPCard] = useState<ComponentType<any> | null>(null)
-  const [GScan, setGScan] = useState<ComponentType<any> | null>(null)
   const preloadedRef = useRef(false)
 
   const preloadComponents = () => {
     if (preloadedRef.current) return
     preloadedRef.current = true
     import("./PixelCard").then(m => setPCard(() => (m as any).default))
-    import("./GridScan").then(m => setGScan(() => (m as any).default))
   }
 
   const ticketRef = useRef<HTMLDivElement>(null)
@@ -303,25 +301,7 @@ export default function EasterEggVIP({ imageUrls = [] }: EasterEggVIPProps) {
       {(phase === "ledger" ||
         phase === "transitioning" ||
         phase === "artifact_revealed") && (
-        <div className="fixed inset-0 z-40 pointer-events-none">
-          {GScan ? (
-            <GScan
-              sensitivity={0.55}
-              lineThickness={1.5}
-              linesColor="#2F293A"
-              gridScale={0.2}
-              scanColor="#FF9FFC"
-              scanOpacity={0.4}
-              enablePost
-              bloomIntensity={0.6}
-              chromaticAberration={0.0015}
-              noiseIntensity={0.025}
-              lineJitter={0.43}
-              scanGlow={0.7}
-              scanSoftness={1.1}
-            />
-          ) : null}
-        </div>
+        <div className="fixed inset-0 z-40 bg-card-pan" />
       )}
 
       {(phase === "ledger" || phase === "artifact_revealed") && (
