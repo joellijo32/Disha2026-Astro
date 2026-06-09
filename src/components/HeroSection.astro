@@ -82,9 +82,12 @@ import LiquidChrome from './LiquidChrome';
 
 <main class="relative z-20 flex flex-col items-center justify-center grow px-4 text-center -mt-16 md:-mt-16 lg:-mt-24">
   <div class="relative mb-6 md:mb-10 w-fit mx-auto whitespace-nowrap z-0 flex items-center justify-center">
+  <div class="relative mb-6 md:mb-10 w-fit mx-auto whitespace-nowrap z-0 flex items-center justify-center">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(0,0,0,0.7)_0%,_transparent_70%)] blur-md z-10 pointer-events-none"></div>
     <h1 class="relative z-20 [text-shadow:0_0_15px_#cc007c,4px_4px_20px_rgba(0,0,0,1)] text-8xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] text-[#cc007c]">
       Disha '26
     </h1>
+  </div>
   </div>
   
   <a href="https://forms.gle/jHP7ByHxjmZ2psXv8" target="_blank" rel="noopener noreferrer" class="mt-8 px-12 py-3.5 bg-[#DE005F] text-white text-sm font-bold uppercase tracking-[0.2em] hover:bg-[#b8004e] active:scale-95 transition-all duration-200 select-none whitespace-nowrap relative z-10 shadow-xl font-bohme inline-block">
@@ -220,7 +223,7 @@ import LiquidChrome from './LiquidChrome';
   if (heroEl && headerTitle) {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        headerTitle.textContent = entry.isIntersecting ? 'CET College Union 2025-26' : 'Disha 2026';
+        headerTitle.textContent = entry.isIntersecting ? 'CET College Union 25-26' : 'Disha 2026';
       },
       { threshold: 0.1 }
     );
