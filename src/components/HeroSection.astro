@@ -1,7 +1,6 @@
 ---
 import heroBg from '../assets/kalyani_background_2.webp';
 import dishaLogo from '../assets/disha_logo.webp';
-// import CountdownTimer from './CountdownTimer.astro';
 import LiquidChrome from './LiquidChrome';
 ---
 
@@ -82,10 +81,10 @@ import LiquidChrome from './LiquidChrome';
 
   <main class="relative z-20 flex flex-col items-center justify-center grow px-4 text-center -mt-16 md:-mt-16 lg:-mt-24">
     <div class="relative mb-6 md:mb-10 w-fit mx-auto whitespace-nowrap z-0 flex items-center justify-center">
-      <div class="absolute -inset-x-12 -inset-y-6 bg-[radial-gradient(ellipse_at_center,_rgba(0,0,0,0.9)_30%,_transparent_85%)] blur-xl z-10 pointer-events-none"></div>
+      <div class="absolute -inset-x-24 -inset-y-12 bg-[radial-gradient(ellipse_at_center,_rgba(0,0,0,1)_45%,_transparent_85%)] blur-2xl z-10 pointer-events-none"></div>
       <div class="relative z-90 mb-6 md:mb-10 w-fit mx-auto whitespace-nowrap z-0 grid place-items-center">
   
-        <h1 aria-hidden="true" class="col-start-1 row-start-1 text-[#cc007c] [-webkit-text-stroke:8px_#000] [text-shadow:8px_8px_25px_rgba(0,0,0,0.8)] text-[6.5rem] md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] pointer-events-none">
+        <h1 aria-hidden="true" class="col-start-1 row-start-1 text-[#cc007c] [-webkit-text-stroke:8px_#000] [text-shadow:0_0_40px_rgba(0,0,0,1),0_0_80px_rgba(0,0,0,1)] text-[6.5rem] md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-extrabold tracking-tighter font-['Sedgwick_Ave_Display',_cursive] pointer-events-none">
           DIsha '26
         </h1>
         
@@ -153,7 +152,6 @@ import LiquidChrome from './LiquidChrome';
 </style>
 
 <script>
-  // --- Mobile Menu ---
   const menuToggle = document.getElementById('menu-toggle');
   const overlay = document.getElementById('mobile-overlay');
   const menuCard = document.getElementById('menu-card');
@@ -216,7 +214,6 @@ import LiquidChrome from './LiquidChrome';
     });
   }
 
-  // --- Pause scanline when off-screen ---
   var scanlineEl = document.querySelector('.scanline-move');
   var scanlineObserver = new IntersectionObserver(function (entries) {
     for (var i = 0; i < entries.length; i++) {
@@ -225,7 +222,6 @@ import LiquidChrome from './LiquidChrome';
   }, { threshold: 0 });
   if (scanlineEl && scanlineEl.parentElement) scanlineObserver.observe(scanlineEl.parentElement);
 
-  // --- Scroll-Aware Header Title ---
   const heroEl = document.getElementById('home');
   const headerTitle = document.getElementById('header-title');
   if (heroEl && headerTitle) {
@@ -238,7 +234,6 @@ import LiquidChrome from './LiquidChrome';
     observer.observe(heroEl);
   }
 
-  // --- Timer complete handler ---
   document.addEventListener('timer:complete', function () {
     var timerWrapper = document.getElementById('timer-wrapper');
     if (timerWrapper) timerWrapper.style.display = 'none';
