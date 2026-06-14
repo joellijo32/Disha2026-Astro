@@ -16,7 +16,7 @@ const REAL_EVENTS_DATA = [
 ];
 ---
 
-<section id="events" class="relative w-full bg-black z-20">
+<section id="events" class="relative w-full bg-black z-20" style="touch-action: pan-y;">
   <div class="absolute inset-0 z-0 h-full w-full pointer-events-auto">
     <div class="sticky top-0 w-full h-[100dvh] overflow-hidden bg-black">
       <div class="absolute inset-0 w-full h-full">
@@ -96,97 +96,139 @@ const REAL_EVENTS_DATA = [
 
     var maxScroll = 0;
     var sectionTop = -1;
-    var scrollPos = 0;
-    var rafPending = false;
+
+    var targetX = 0;
+    var currentX = 0;
+    var rafId = null;
+    var lastTickTime = 0;
+
+    var isSwipingH = false;
+    var touchStartX = 0;
+    var touchStartY = 0;
+    var touchBaseX = 0;
+    var lastTouchX = 0;
+    var lastTouchTime = 0;
+    var velocityX = 0;
+
+    function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
 
     function getScrollAmount() {
       return Math.max(0, wrapper.scrollWidth - window.innerWidth);
     }
 
-    function setup() {
-      var newMaxScroll = getScrollAmount();
-      var eventsSection = section.parentElement;
-      var newSectionTop = eventsSection.getBoundingClientRect().top + window.scrollY;
-      var newScrollPos = Math.max(0, Math.min(window.scrollY - newSectionTop, newMaxScroll));
-
-      maxScroll = newMaxScroll;
-      sectionTop = newSectionTop;
-      scrollPos = newScrollPos;
-      spacer.style.height = maxScroll + 'px';
-      wrapper.style.transform = 'translate3d(' + (-scrollPos) + 'px, 0px, 0px)';
+    function applyNow() {
+      wrapper.style.transform = 'translate3d(' + (-currentX) + 'px,0,0)';
     }
 
-    function onScroll() {
-      // FIX 1: If the user is swiping horizontally, completely ignore native scroll events.
-      // This stops the browser from snapping the layout back to the old scrollbar position.
-      if (sectionTop === -1 || isSwipingH) return; 
+    function setup() {
+      var eventsSection = section.parentElement;
+      maxScroll = getScrollAmount();
+      sectionTop = eventsSection.getBoundingClientRect().top + window.scrollY;
+      targetX = clamp(window.scrollY - sectionTop, 0, maxScroll);
+      currentX = targetX;
+      spacer.style.height = maxScroll + 'px';
+      applyNow();
+    }
 
-      scrollPos = Math.max(0, Math.min(window.scrollY - sectionTop, maxScroll));
-      if (!rafPending) {
-        rafPending = true;
-        requestAnimationFrame(applyTransform);
+    var BASE = 0.88;
+
+    function tick(now) {
+      var dt = now - lastTickTime;
+      lastTickTime = now;
+      if (dt <= 0 || dt > 100) dt = 16.67;
+
+      var running = false;
+
+      if (velocityX !== 0) {
+        velocityX *= Math.pow(0.94, dt / 16.67);
+        if (Math.abs(velocityX) >= 0.01) {
+          currentX = clamp(currentX + velocityX * dt, 0, maxScroll);
+          targetX = currentX;
+          running = true;
+        } else {
+          velocityX = 0;
+        }
+      }
+
+      var diff = targetX - currentX;
+      if (Math.abs(diff) >= 0.25) {
+        var factor = 1 - Math.pow(BASE, dt / 16.67);
+        currentX += diff * factor;
+        running = true;
+      }
+
+      applyNow();
+
+      if (running) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        rafId = null;
       }
     }
 
-    function applyTransform() {
-      rafPending = false;
-      wrapper.style.transform = 'translate3d(' + (-scrollPos) + 'px, 0px, 0px)';
+    function startLoop() {
+      if (!rafId) {
+        lastTickTime = performance.now();
+        rafId = requestAnimationFrame(tick);
+      }
     }
 
-    // --- Touch swipe (mobile) ---
-    var touchStartX = 0;
-    var touchStartY = 0;
-    var isSwipingH = false;
-    var touchBaseScroll = 0;
+    function onScroll() {
+      if (sectionTop === -1 || isSwipingH) return;
+      targetX = clamp(window.scrollY - sectionTop, 0, maxScroll);
+      currentX = targetX;
+      applyNow();
+    }
 
     function handleTouchStart(e) {
       touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
+      lastTouchX = touchStartX;
+      lastTouchTime = performance.now();
+      velocityX = 0;
       isSwipingH = false;
-      touchBaseScroll = scrollPos;
+      touchBaseX = currentX;
+
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      currentX = targetX;
     }
 
     function handleTouchMove(e) {
-      var currentX = e.touches[0].clientX;
-      var diffX = touchStartX - currentX;
-      var diffY = touchStartY - e.touches[0].clientY;
+      var cx = e.touches[0].clientX;
+      var dx = touchStartX - cx;
+      var dy = touchStartY - e.touches[0].clientY;
 
-      if (!isSwipingH && Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 10) {
-        isSwipingH = true;
-      }
-
-      if (isSwipingH) {
-        if (e.cancelable) e.preventDefault();
-        
-        // Multiply diffX by 1.2 to make the swipe feel slightly more responsive
-        scrollPos = Math.max(0, Math.min(touchBaseScroll + (diffX * 1.2), maxScroll));
-        if (!rafPending) {
-          rafPending = true;
-          requestAnimationFrame(applyTransform);
+      if (!isSwipingH) {
+        if (Math.abs(dx) > 5 && Math.abs(dx) > Math.abs(dy)) {
+          isSwipingH = true;
+        } else {
+          return;
         }
       }
+
+      if (e.cancelable) e.preventDefault();
+
+      var now = performance.now();
+      var dt = now - lastTouchTime;
+      if (dt > 0) velocityX = (lastTouchX - cx) / dt;
+      lastTouchX = cx;
+      lastTouchTime = now;
+
+      targetX = clamp(touchBaseX + dx, 0, maxScroll);
+      currentX = targetX;
+      applyNow();
     }
 
     function handleTouchEnd() {
-      if (isSwipingH) {
-        // FIX 2: The moment the user lets go, force the native vertical scrollbar 
-        // to instantly jump to match our new visual reality. 
-        window.scrollTo({
-          top: sectionTop + scrollPos,
-          left: 0,
-          behavior: 'instant' // Must be instant so it's invisible to the user
-        });
-        
-        // Delay releasing the lock by 50ms so any residual inertia scroll events are ignored
-        setTimeout(function() {
-          isSwipingH = false;
-        }, 50);
-      } else {
-        isSwipingH = false;
-      }
+      if (!isSwipingH) return;
+
+      window.scrollTo({ top: sectionTop + currentX, left: 0, behavior: 'instant' });
+
+      startLoop();
+
+      setTimeout(function () { isSwipingH = false; }, 60);
     }
 
-    // --- Init ---
     var ro = new ResizeObserver(setup);
     ro.observe(document.body);
 
