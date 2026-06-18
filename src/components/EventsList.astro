@@ -87,6 +87,13 @@ const REAL_EVENTS_DATA = [
   <div id="events-spacer" class="w-full pointer-events-none"></div>
 </section>
 
+<style>
+  #events-cards-wrapper {
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+  }
+</style>
+
 <script>
   (function () {
     var section = document.getElementById('events-scroll-section');
@@ -167,7 +174,9 @@ const REAL_EVENTS_DATA = [
         running = true;
       }
 
-      applyNow();
+      if (running) {
+        applyNow();
+      }
 
       if (running) {
         rafId = requestAnimationFrame(tick);
