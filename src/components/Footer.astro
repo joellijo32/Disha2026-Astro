@@ -27,13 +27,6 @@ import WaveBg from './ThreeCanvas.jsx';
   <div class="relative z-10">
     <!-- Mobile / Tablet: stacked, centered -->
     <div class="flex flex-col items-center gap-8 lg:hidden w-full max-w-7xl mx-auto px-6 py-10">
-      <div class="text-center font-myriad">
-        <p class="text-zinc-600 text-xs tracking-[0.15em] font-semibold uppercase">Created and maintained by:</p>
-        <div class="mt-2 space-y-1">
-          <p class="text-zinc-500 text-xs tracking-[0.1em]">{name1}: {ph1}</p>
-          <p class="text-zinc-500 text-xs tracking-[0.1em]">{name2}: {ph2}</p>
-        </div>
-      </div>
 
       <h2 class="relative vip-secret-trigger cursor-pointer select-none font-['Sedgwick_Ave_Display',_cursive] font-extrabold tracking-tighter text-white leading-none text-center
                   text-[clamp(3rem,15vw,6rem)] group">
@@ -74,6 +67,14 @@ import WaveBg from './ThreeCanvas.jsx';
             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
           </svg>
         </a>
+      </div>
+
+      <div class="text-center font-myriad">
+        <p class="text-zinc-600 text-xs tracking-[0.15em] font-semibold uppercase">Created and maintained by:</p>
+        <div class="mt-2 space-y-1">
+          <p class="text-zinc-500 text-xs tracking-[0.1em]">{name1}: {ph1}</p>
+          <p class="text-zinc-500 text-xs tracking-[0.1em]">{name2}: {ph2}</p>
+        </div>
       </div>
     </div>
 
