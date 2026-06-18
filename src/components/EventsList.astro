@@ -1,5 +1,5 @@
 ---
-import DitherCanvas from './ThreeCanvas.jsx';
+import DitherCanvas from './ThreeCanvasImpl.jsx';
 
 const REAL_EVENTS_DATA = [
   { id: 1, title: 'MAIN EVENTS', eventsList: ['Face of Disha', 'MX-Techie', 'MX-Disha', 'Fashion Show', 'Street Play', 'Disha Idol', 'Just Dance', 'Wall Painting'] },
@@ -117,8 +117,6 @@ const REAL_EVENTS_DATA = [
     var lastTouchTime = 0;
     var velocityX = 0;
     
-    var scrollTimeout = null;
-
     function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
 
     function getScrollAmount() {
@@ -129,14 +127,6 @@ const REAL_EVENTS_DATA = [
       wrapper.style.transform = 'translate3d(' + (-currentX) + 'px,0,0)';
     }
     
-    function freezeBackground() {
-      window.dispatchEvent(new CustomEvent('freeze-page-animations', { detail: { frozen: true } }));
-      if (scrollTimeout) clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(function() {
-        window.dispatchEvent(new CustomEvent('freeze-page-animations', { detail: { frozen: false } }));
-      }, 150);
-    }
-
     function setup() {
       var eventsSection = section.parentElement;
       maxScroll = getScrollAmount();
@@ -197,7 +187,6 @@ const REAL_EVENTS_DATA = [
       targetX = clamp(window.scrollY - sectionTop, 0, maxScroll);
       currentX = targetX;
       applyNow();
-      freezeBackground();
     }
 
     function handleTouchStart(e) {
@@ -237,7 +226,6 @@ const REAL_EVENTS_DATA = [
       targetX = clamp(touchBaseX + dx, 0, maxScroll);
       currentX = targetX;
       applyNow();
-      freezeBackground();
     }
 
     function handleTouchEnd() {

@@ -132,7 +132,7 @@ void main() {
   color.rgb      += threshold * stepSize;
   color.rgb       = clamp(color.rgb, 0.0, 1.0);
   color.rgb       = floor(color.rgb * denom + 0.5) / denom;
-  color.rgb       = min(color.rgb, source + stepSize * 0.5);
+  color.rgb       = min(color.rgb, source);
 
   fragColor = color;
 }
@@ -187,7 +187,7 @@ export default function DitherCanvas({
     const container = containerRef.current;
     if (!container) return;
 
-    const octaves            = isMobile ? '1' : '3';
+    const octaves            = isMobile ? '2' : '3';
     const waveFragmentShader = WAVE_FRAGMENT_BASE.replace('__OCTAVES__', octaves);
     const activeMouse        = enableMouseInteraction && !isMobile;
 
