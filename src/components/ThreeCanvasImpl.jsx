@@ -235,7 +235,7 @@ function DitheredWaves({
   const processedFragmentShader = React.useMemo(() => {
     return waveFragmentShader.replace(
       'const int OCTAVES = 3;',
-      `const int OCTAVES = ${isMobile ? '2' : '3'};`
+      `const int OCTAVES = ${isMobile ? '1' : '3'};`
     );
   }, [isMobile]);
 
@@ -290,6 +290,8 @@ function DitherCanvas({
   enableMouseInteraction = true,
   mouseRadius = 1
 }) {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+  const effectivePixelSize = isMobile ? 4 : pixelSize;
   const containerRef = useRef(null);
   const [isVisible, setIsVisible] = useState(true);
   const [pageFrozen, setPageFrozen] = useState(false);
@@ -329,7 +331,7 @@ function DitherCanvas({
           waveAmplitude={waveAmplitude}
           waveColor={waveColor}
           colorNum={colorNum}
-          pixelSize={pixelSize}
+          pixelSize={effectivePixelSize}
           disableAnimation={disableAnimation || !isVisible || pageFrozen}
           enableMouseInteraction={enableMouseInteraction && isVisible}
           mouseRadius={mouseRadius}
