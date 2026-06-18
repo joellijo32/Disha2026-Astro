@@ -10,7 +10,7 @@ import WaveBg from './ThreeCanvas.jsx';
 <footer class="w-full bg-black flex flex-col relative overflow-hidden">
   <div class="absolute inset-0 z-0">
     <WaveBg
-      client:visible
+      client:load
       waveColor={[0.3, 0.05, 0.5]}
       disableAnimation={false}
       enableMouseInteraction={false}
@@ -25,15 +25,7 @@ import WaveBg from './ThreeCanvas.jsx';
   <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black to-transparent z-[5] pointer-events-none"></div>
 
   <div class="relative z-10">
-    <!-- Mobile / Tablet: stacked, centered -->
-    <div class="flex flex-col items-center gap-8 lg:hidden w-full max-w-7xl mx-auto px-6 py-10">
-      <div class="text-center font-myriad">
-        <p class="text-zinc-600 text-xs tracking-[0.15em] font-semibold uppercase">Created and maintained by:</p>
-        <div class="mt-2 space-y-1">
-          <p class="text-zinc-500 text-xs tracking-[0.1em]">{name1}: {ph1}</p>
-          <p class="text-zinc-500 text-xs tracking-[0.1em]">{name2}: {ph2}</p>
-        </div>
-      </div>
+    <div class="flex flex-col items-center gap-8 lg:hidden w-full max-w-7xl mx-auto px-6 pt-20 pb-2">
 
       <h2 class="relative vip-secret-trigger cursor-pointer select-none font-['Sedgwick_Ave_Display',_cursive] font-extrabold tracking-tighter text-white leading-none text-center
                   text-[clamp(3rem,15vw,6rem)] group">
@@ -75,11 +67,17 @@ import WaveBg from './ThreeCanvas.jsx';
           </svg>
         </a>
       </div>
+
+      <div class="text-center font-myriad">
+        <p class="text-zinc-600 text-xs tracking-[0.15em] font-semibold uppercase">Created and maintained by:</p>
+        <div class="mt-2 space-y-1">
+          <p class="text-zinc-500 text-xs tracking-[0.1em]">{name1}: {ph1}</p>
+          <p class="text-zinc-500 text-xs tracking-[0.1em]">{name2}: {ph2}</p>
+        </div>
+      </div>
     </div>
 
-    <!-- Desktop / Laptop -->
-    <div class="hidden lg:grid lg:grid-cols-[65%_35%] w-full max-w-7xl mx-auto px-12 pt-6 pb-12">
-      <!-- Left: DISHA -->
+    <div class="hidden lg:grid lg:grid-cols-[65%_35%] w-full max-w-7xl mx-auto px-12 pt-6 pb-4">
       <div class="flex flex-col justify-end">
         <h2 class="relative vip-secret-trigger cursor-pointer select-none font-['Sedgwick_Ave_Display',_cursive] font-extrabold tracking-tighter text-white leading-none
                    text-[clamp(2.5rem,8vw,6.5rem)] group">
@@ -90,7 +88,6 @@ import WaveBg from './ThreeCanvas.jsx';
         </h2>
       </div>
 
-      <!-- Right: Icons + Credits -->
       <div class="flex flex-col justify-center items-center">
         <div class="flex items-center justify-center gap-10 mx-auto">
           <a href="https://www.instagram.com/dishacet" target="_blank" rel="noopener noreferrer"
@@ -135,8 +132,7 @@ import WaveBg from './ThreeCanvas.jsx';
       </div>
     </div>
 
-    <!-- Bottom Bar -->
-    <div class="w-full py-4 lg:py-3">
+    <div class="w-full py-1 lg:py-3">
       <div class="max-w-7xl mx-auto px-6 lg:px-12 text-center">
         <a href="https://www.instagram.com/cet.college.union" target="_blank" rel="noopener noreferrer"
            class="text-zinc-600 hover:text-purple-400 transition-colors text-[10px] lg:text-[11px] tracking-[0.3em] font-bold uppercase">

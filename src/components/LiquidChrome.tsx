@@ -18,7 +18,6 @@ export const LiquidChrome = ({
     const container = containerRef.current;
     const renderer = new Renderer({ antialias: true, alpha: true });
     const gl = renderer.gl;
-    // gl.clearColor(1, 1, 1, 1); // Removed to allow transparency if needed
 
     const vertexShader = `
       attribute vec2 position;
@@ -98,6 +97,10 @@ export const LiquidChrome = ({
     ro.observe(container);
     resize();
 
+    container.appendChild(gl.canvas);
+    program.uniforms.uTime.value = 0;
+    renderer.render({ scene: mesh });
+
     function handleMouseMove(event) {
       const x = (event.clientX - containerRect.left) / containerRect.width;
       const y = 1 - (event.clientY - containerRect.top) / containerRect.height;
@@ -142,8 +145,6 @@ export const LiquidChrome = ({
     } else {
       window.addEventListener('site-ready', onSiteReady, { once: true });
     }
-
-    container.appendChild(gl.canvas);
 
     return () => {
       cancelAnimationFrame(animationId);
