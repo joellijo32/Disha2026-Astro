@@ -48,6 +48,7 @@ import LiquidChrome from './LiquidChrome';
         <svg id="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="hidden"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
     </div>
+    <div id="scroll-progress" class="absolute top-full left-0 w-full h-[3px] bg-gradient-to-r from-[#cc007c] to-[#DE005F] origin-left z-[100] will-change-transform shadow-[0_0_8px_rgba(222,0,95,0.5)]"></div>
   </header>
 
   <div id="mobile-overlay" class="fixed inset-0 z-[55] flex-col hidden" style="background:rgba(0,0,0,0.85);backdrop-filter:blur(12px)">
@@ -151,6 +152,25 @@ import LiquidChrome from './LiquidChrome';
     animation: ticker 27s linear infinite;
     will-change: transform;
   }
+  @keyframes grow-progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  #scroll-progress {
+    transform: scaleX(0);
+    transform-origin: left;
+    will-change: transform;
+  }
+  @supports (animation-timeline: scroll()) {
+    #scroll-progress {
+      animation: grow-progress auto linear forwards;
+      animation-timeline: scroll();
+    }
+  }
 </style>
 
 <script>
@@ -243,4 +263,23 @@ import LiquidChrome from './LiquidChrome';
       el.textContent = 'IS LIVE!';
     });
   });
+
+  (function () {
+    const progress = document.getElementById('scroll-progress');
+    if (!progress) return;
+
+    function updateProgress() {
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollHeight > 0) {
+        const scrollPercent = window.scrollY / scrollHeight;
+        progress.style.transform = `scaleX(${scrollPercent})`;
+      } else {
+        progress.style.transform = 'scaleX(0)';
+      }
+    }
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress, { passive: true });
+    updateProgress();
+  })();
 </script>
