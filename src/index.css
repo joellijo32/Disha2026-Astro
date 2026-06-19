@@ -1,12 +1,12 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: "Radio Canada Big", sans-serif;
-  --font-display: "Anton", sans-serif;
-  --font-sc: "Anton SC", sans-serif;
-  --font-bohme: "Bohme", sans-serif;
-  --font-bohme-rounded: "Bohme Rounded", sans-serif;
-  --font-myriad: "Myriad Pro", sans-serif;
+  --font-sans: 'Radio Canada Big', sans-serif;
+  --font-display: 'Anton', sans-serif;
+  --font-sc: 'Anton SC', sans-serif;
+  --font-bohme: 'Bohme', sans-serif;
+  --font-bohme-rounded: 'Bohme Rounded', sans-serif;
+  --font-myriad: 'Myriad Pro', sans-serif;
 }
 
 @font-face {
@@ -57,9 +57,18 @@
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.5rem;
-  background: radial-gradient(circle, var(--main-bg-color) 0%, rgba(0, 0, 0, 0) 95%), linear-gradient(var(--pattern-color) 1px, transparent 1px), linear-gradient(to right, var(--pattern-color) 1px, transparent 1px);
-  background-size: cover, 15px 15px, 15px 15px;
-  background-position: center center, center center, center center;
+  background:
+    radial-gradient(circle, var(--main-bg-color) 0%, rgba(0, 0, 0, 0) 95%),
+    linear-gradient(var(--pattern-color) 1px, transparent 1px),
+    linear-gradient(to right, var(--pattern-color) 1px, transparent 1px);
+  background-size:
+    cover,
+    15px 15px,
+    15px 15px;
+  background-position:
+    center center,
+    center center,
+    center center;
   border-image: radial-gradient(circle, var(--main-color) 0%, rgba(0, 0, 0, 0) 100%) 1;
   border-width: 1px 0 1px 0;
   color: var(--main-color);
@@ -70,12 +79,14 @@
 }
 
 .uiverse-start-button:hover {
-  background-size: cover, 10px 10px, 10px 10px;
+  background-size:
+    cover,
+    10px 10px,
+    10px 10px;
 }
 .uiverse-start-button:active {
   filter: hue-rotate(250deg);
 }
-
 
 html,
 body {

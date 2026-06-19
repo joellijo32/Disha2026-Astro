@@ -153,8 +153,8 @@ export default function DitherCanvas({
   enableMouseInteraction = true,
   mouseRadius = 1,
 }) {
-  const containerRef  = useRef(null);
-  const requestRef    = useRef();
+  const containerRef = useRef(null);
+  const requestRef = useRef();
   const visibilityRef = useRef({ isVisible: true, pageFrozen: false });
   const [isMobile, setIsMobile] = useState(getIsMobile);
 
@@ -168,7 +168,9 @@ export default function DitherCanvas({
     const el = containerRef.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => { visibilityRef.current.isVisible = entry.isIntersecting; },
+      ([entry]) => {
+        visibilityRef.current.isVisible = entry.isIntersecting;
+      },
       { threshold: 0 }
     );
     observer.observe(el);
@@ -176,7 +178,9 @@ export default function DitherCanvas({
   }, []);
 
   useEffect(() => {
-    const handler = (e) => { visibilityRef.current.pageFrozen = e.detail.frozen; };
+    const handler = (e) => {
+      visibilityRef.current.pageFrozen = e.detail.frozen;
+    };
     window.addEventListener('freeze-page-animations', handler);
     return () => window.removeEventListener('freeze-page-animations', handler);
   }, []);
@@ -187,55 +191,55 @@ export default function DitherCanvas({
     const container = containerRef.current;
     if (!container) return;
 
-    const octaves            = isMobile ? '2' : '3';
+    const octaves = isMobile ? '2' : '3';
     const waveFragmentShader = WAVE_FRAGMENT_BASE.replace('__OCTAVES__', octaves);
-    const activeMouse        = enableMouseInteraction && !isMobile;
+    const activeMouse = enableMouseInteraction && !isMobile;
 
     const renderer = new Renderer({
-      antialias:       false,
-      alpha:           true,
-      webgl:           2,
-      dpr:             Math.min(window.devicePixelRatio, 2),
+      antialias: false,
+      alpha: true,
+      webgl: 2,
+      dpr: Math.min(window.devicePixelRatio, 2),
       powerPreference: 'high-performance',
     });
-    const gl  = renderer.gl;
+    const gl = renderer.gl;
     const dpr = renderer.dpr;
 
     const target = new RenderTarget(gl, { width: 1, height: 1 });
 
     const waveProgram = new Program(gl, {
-      vertex:   vertexShader,
+      vertex: vertexShader,
       fragment: waveFragmentShader,
       uniforms: {
-        time:                   { value: 0 },
-        resolution:             { value: [1, 1] },
-        waveSpeed:              { value: waveSpeed },
-        waveFrequency:          { value: waveFrequency },
-        waveAmplitude:          { value: waveAmplitude },
-        waveColor:              { value: new Float32Array(waveColor) },
-        mousePos:               { value: [-9999, -9999] },
+        time: { value: 0 },
+        resolution: { value: [1, 1] },
+        waveSpeed: { value: waveSpeed },
+        waveFrequency: { value: waveFrequency },
+        waveAmplitude: { value: waveAmplitude },
+        waveColor: { value: new Float32Array(waveColor) },
+        mousePos: { value: [-9999, -9999] },
         enableMouseInteraction: { value: activeMouse ? 1.0 : 0.0 },
-        mouseRadius:            { value: mouseRadius },
+        mouseRadius: { value: mouseRadius },
       },
     });
     const waveMesh = new Mesh(gl, {
       geometry: new Triangle(gl),
-      program:  waveProgram,
+      program: waveProgram,
     });
 
     const ditherProgram = new Program(gl, {
-      vertex:   vertexShader,
+      vertex: vertexShader,
       fragment: ditherFragmentShader,
       uniforms: {
-        tDiffuse:   { value: target.texture },
-        colorNum:   { value: colorNum },
-        pixelSize:  { value: effectivePixelSize },
+        tDiffuse: { value: target.texture },
+        colorNum: { value: colorNum },
+        pixelSize: { value: effectivePixelSize },
         resolution: { value: [1, 1] },
       },
     });
     const ditherMesh = new Mesh(gl, {
       geometry: new Triangle(gl),
-      program:  ditherProgram,
+      program: ditherProgram,
     });
 
     const resize = () => {
@@ -252,7 +256,7 @@ export default function DitherCanvas({
       ditherProgram.uniforms.tDiffuse.value = target.texture;
 
       const res = [pw, ph];
-      waveProgram.uniforms.resolution.value   = res;
+      waveProgram.uniforms.resolution.value = res;
       ditherProgram.uniforms.resolution.value = res;
     };
 
@@ -262,18 +266,15 @@ export default function DitherCanvas({
     resize();
 
     const animState = {
-      time:        0,
-      lastTime:    0,
-      mouse:       [-9999, -9999],
+      time: 0,
+      lastTime: 0,
+      mouse: [-9999, -9999],
       targetMouse: [-9999, -9999],
     };
 
     const handlePointer = (e) => {
       const rect = gl.canvas.getBoundingClientRect();
-      animState.targetMouse = [
-        (e.clientX - rect.left) * dpr,
-        (e.clientY - rect.top)  * dpr,
-      ];
+      animState.targetMouse = [(e.clientX - rect.left) * dpr, (e.clientY - rect.top) * dpr];
     };
     if (activeMouse) {
       window.addEventListener('pointermove', handlePointer);
@@ -290,32 +291,32 @@ export default function DitherCanvas({
       if (!animState.lastTime) animState.lastTime = t;
       const delta = Math.min((t - animState.lastTime) / 1000, 0.05);
       animState.lastTime = t;
-      animState.time    += delta;
+      animState.time += delta;
 
       const u = waveProgram.uniforms;
       u.time.value = animState.time;
 
-      if (u.waveSpeed.value     !== waveSpeed)     u.waveSpeed.value     = waveSpeed;
+      if (u.waveSpeed.value !== waveSpeed) u.waveSpeed.value = waveSpeed;
       if (u.waveFrequency.value !== waveFrequency) u.waveFrequency.value = waveFrequency;
       if (u.waveAmplitude.value !== waveAmplitude) u.waveAmplitude.value = waveAmplitude;
 
       if (!prevColor.every((v, i) => v === waveColor[i])) {
         u.waveColor.value = new Float32Array(waveColor);
-        prevColor         = [...waveColor];
+        prevColor = [...waveColor];
       }
 
       u.enableMouseInteraction.value = activeMouse ? 1.0 : 0.0;
-      u.mouseRadius.value            = mouseRadius;
+      u.mouseRadius.value = mouseRadius;
 
       if (activeMouse) {
         const [tx, ty] = animState.targetMouse;
-        const m        = animState.mouse;
+        const m = animState.mouse;
         m[0] += (tx - m[0]) * 0.1;
         m[1] += (ty - m[1]) * 0.1;
         u.mousePos.value = [...m];
       }
 
-      renderer.render({ scene: waveMesh,   target });
+      renderer.render({ scene: waveMesh, target });
       renderer.render({ scene: ditherMesh });
     };
 
@@ -332,9 +333,14 @@ export default function DitherCanvas({
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, [
-    waveSpeed, waveFrequency, waveAmplitude,
-    colorNum, effectivePixelSize,
-    disableAnimation, enableMouseInteraction, mouseRadius,
+    waveSpeed,
+    waveFrequency,
+    waveAmplitude,
+    colorNum,
+    effectivePixelSize,
+    disableAnimation,
+    enableMouseInteraction,
+    mouseRadius,
     isMobile,
   ]);
 
