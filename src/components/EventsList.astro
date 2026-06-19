@@ -102,6 +102,7 @@ const REAL_EVENTS_DATA = [
   var maxScroll   = 0;   // total horizontal travel
   var displayX    = 0;   // what's currently on screen
   var rafId       = null;
+  var leadIn      = 0;   // px of vertical scroll to absorb before horizontal motion starts
 
   /* touch state */
   var touchActive = false;
@@ -115,20 +116,15 @@ const REAL_EVENTS_DATA = [
   /* ─── helpers ────────────────────────────────────────────────── */
   function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
 
-  /* Read layout metrics without touching the wrapper transform —
-     offsetTop chain avoids forced reflows caused by getBoundingClientRect. */
+  /* Read the section's document-relative top accurately. offsetTop chains
+     break across position:sticky/absolute ancestors (this layout has both),
+     silently producing a wrong value. getBoundingClientRect is reliable
+     regardless of positioning context; called only in setup(), not on
+     every scroll, so the single reflow it costs is negligible. */
   function getSectionTop() {
-    var el = wrapper.parentElement; // #events-scroll-section
-    if (!el) return 0;
-    var parent = el.parentElement;  // #events section
-    if (!parent) return 0;
-    var top = 0;
-    var node = parent;
-    while (node && node !== document.body) {
-      top += node.offsetTop;
-      node = node.offsetParent;
-    }
-    return top;
+    var section = wrapper.closest('#events');
+    if (!section) return 0;
+    return section.getBoundingClientRect().top + window.scrollY;
   }
 
   function applyTransform(x) {
@@ -140,9 +136,16 @@ const REAL_EVENTS_DATA = [
   function setup() {
     maxScroll  = Math.max(0, wrapper.scrollWidth - window.innerWidth);
     sectionTop = getSectionTop();
-    spacer.style.height = maxScroll + 'px';
+
+    /* Hold position for the first half of the section's pinned duration —
+       lets the user finish reading the heading before horizontal motion
+       begins. */
+    leadIn = window.innerHeight * 0.675;
+
+    spacer.style.height = (maxScroll + leadIn) + 'px';
+
     /* Snap display to current scroll position immediately. */
-    displayX = clamp(window.scrollY - sectionTop, 0, maxScroll);
+    displayX = clamp(window.scrollY - sectionTop - leadIn, 0, maxScroll);
     applyTransform(displayX);
   }
 
@@ -160,7 +163,7 @@ const REAL_EVENTS_DATA = [
       velX *= FRICTION;
       applyTransform(displayX);
       /* Sync page scroll so the two stay in step */
-      window.scrollTo({ top: sectionTop + displayX, behavior: 'instant' });
+      window.scrollTo({ top: sectionTop + leadIn + displayX, behavior: 'instant' });
       rafId = requestAnimationFrame(loop);
     }
   }
@@ -176,7 +179,7 @@ const REAL_EVENTS_DATA = [
     scrollQueued = true;
     requestAnimationFrame(function () {
       scrollQueued = false;
-      var target = clamp(window.scrollY - sectionTop, 0, maxScroll);
+      var target = clamp(window.scrollY - sectionTop - leadIn, 0, maxScroll);
       if (target !== displayX) {
         displayX = target;
         applyTransform(displayX);
@@ -227,7 +230,7 @@ const REAL_EVENTS_DATA = [
     touchActive = false;
 
     /* Sync page scroll then kick off momentum */
-    window.scrollTo({ top: sectionTop + displayX, behavior: 'instant' });
+    window.scrollTo({ top: sectionTop + leadIn + displayX, behavior: 'instant' });
 
     /* Convert px/ms → px/frame (≈16.67 ms) and apply initial momentum */
     if (Math.abs(velX) > 0.05) {
