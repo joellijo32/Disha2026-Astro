@@ -48,6 +48,8 @@ import LiquidChrome from './LiquidChrome';
         <svg id="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="hidden"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
     </div>
+    <!-- Scroll Progress Indicator -->
+    <div id="scroll-progress" class="absolute bottom-0 left-0 h-[3px] bg-gradient-to-r from-[#b530ff] to-[#ff2b93] w-0 z-[70] transition-[width] duration-75 ease-out shadow-[0_1px_10px_rgba(255,43,147,0.8)]"></div>
   </header>
 
   <div id="mobile-overlay" class="fixed inset-0 z-[55] flex-col hidden" style="background:rgba(0,0,0,0.85);backdrop-filter:blur(12px)">
@@ -243,4 +245,18 @@ import LiquidChrome from './LiquidChrome';
       el.textContent = 'IS LIVE!';
     });
   });
+
+  const scrollProgress = document.getElementById('scroll-progress');
+  if (scrollProgress) {
+    const updateScrollProgress = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      scrollProgress.style.width = `${progress}%`;
+    };
+
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+    window.addEventListener('resize', updateScrollProgress, { passive: true });
+    updateScrollProgress();
+  }
 </script>
